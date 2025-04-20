@@ -6,118 +6,107 @@
     <title>Options 101: Video 1 - Options Basics</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <style>
-        * {
+        :root {
+            --radius: 12px;
+            --spacing: 1rem;
+            --primary: #0d9488; /* Teal */
+            --primary-light: #9333ea; /* Purple */
+            --background: #ffffff;
+            --surface: #f4f5f7; /* Light gray */
+            --text: #1f2937; /* Dark gray */
+            --text-muted: #6b7280; /* Mid gray */
+            --info-bg: #cffafe; /* Teal-100 */
+            --info-border: #06b6d4; /* Teal-500 */
+            --warning-bg: #ffedd5; /* Amber-100 */
+            --warning-border: #fbbf24; /* Amber-400 */
+            --success: #16a34a;
+            --error: #dc2626;
+        }
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
         body {
-            background-color: #f9fafb;
-            color: #0f172a;
+            font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--surface);
+            color: var(--text);
             line-height: 1.7;
             overflow-x: hidden;
         }
         header {
-            background: linear-gradient(135deg, #1e40af, #60a5fa);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
             text-align: center;
-            padding: 3.5rem 1rem;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent);
-            opacity: 0.6;
+            padding: calc(var(--spacing) * 4) var(--spacing);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
         header h1 {
-            font-size: 3rem;
+            font-size: 2.75rem;
             font-weight: 700;
-            margin-bottom: 0.6rem;
-            position: relative;
-            letter-spacing: -0.02em;
-            animation: fadeInDown 1s ease-out;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing);
         }
         header p {
-            font-size: 1.4rem;
-            font-weight: 300;
-            max-width: 650px;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 700px;
             margin: 0 auto;
-            position: relative;
-            animation: fadeInUp 1s ease-out 0.3s;
-            animation-fill-mode: backwards;
+            line-height: 1.4;
         }
         nav {
-            background-color: #ffffff;
-            padding: 1.3rem;
+            background: var(--background);
+            padding: var(--spacing);
             position: sticky;
             top: 0;
-            z-index: 100;
             box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            z-index: 10;
         }
         nav ul {
             display: flex;
             justify-content: center;
             list-style: none;
+            gap: calc(var(--spacing) * 2);
             flex-wrap: wrap;
-            gap: 2rem;
         }
-        nav ul li a {
+        nav a {
             text-decoration: none;
-            color: #1e40af;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: color 0.3s ease, transform 0.3s ease;
-            position: relative;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1rem;
+            padding-bottom: 4px;
+            transition: color 0.3s;
         }
-        nav ul li a::after {
+        nav a:hover { color: var(--primary-light); }
+        nav a::after {
             content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
+            display: block;
             width: 0;
-            height: 2px;
-            background-color: #3b82f6;
-            transition: width 0.3s ease;
+            height: 3px;
+            background: var(--primary-light);
+            transition: width 0.3s;
         }
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-        nav ul li a:hover {
-            color: #3b82f6;
-            transform: translateY(-2px);
-        }
+        nav a:hover::after { width: 100%; }
         main {
-            max-width: 1150px;
-            margin: 3.5rem auto;
-            padding: 0 1.5rem;
+            max-width: 1200px;
+            margin: calc(var(--spacing) * 4) auto;
+            padding: 0 var(--spacing);
         }
         section {
-            background-color: #ffffff;
-            border-radius: 16px;
-            padding: 2.8rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-            transform: translateY(30px);
-            opacity: 0;
-            animation: slideUp 0.7s ease-out forwards;
-            animation-delay: calc(0.12s * var(--section-index));
+            background: var(--background);
+            border-radius: var(--radius);
+            padding: calc(var(--spacing) * 2.5);
+            margin-bottom: calc(var(--spacing) * 4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
         section h2 {
-            color: #1e40af;
-            font-size: 2.2rem;
-            font-weight: 600;
-            margin-bottom: 1.4rem;
+            color: var(--primary);
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing);
             position: relative;
-            padding-bottom: 0.6rem;
-            letter-spacing: -0.01em;
+            padding-bottom: 0.5rem;
         }
         section h2::after {
             content: '';
@@ -125,120 +114,94 @@
             bottom: 0;
             left: 0;
             width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary));
             border-radius: 2px;
         }
-        section p, section ul {
+        p, ul {
             font-size: 1.15rem;
-            margin-bottom: 1.3rem;
-            color: #475569;
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing);
         }
-        section ul {
-            padding-left: 2rem;
-        }
-        section ul li {
-            margin-bottom: 1rem;
+        ul { padding-left: calc(var(--spacing) * 1.5); }
+        li {
+            margin-bottom: 0.75rem;
             position: relative;
         }
-        section ul li::before {
-            content: '◆';
-            color: #3b82f6;
+        li::before {
+            content: '•';
+            color: var(--primary-light);
             position: absolute;
-            left: -1.5rem;
+            left: -1.2rem;
             font-size: 1.2rem;
+            line-height: 1;
         }
-        .example {
-            background-color: #eff6ff;
-            padding: 1.8rem;
-            border-radius: 12px;
-            margin: 1.5rem 0;
-            border-left: 5px solid #3b82f6;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .box {
+            border-radius: var(--radius);
+            padding: var(--spacing);
+            margin: var(--spacing) 0;
+            transition: transform 0.3s;
         }
-        .example:hover {
-            transform: translateX(8px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        .box-info { background: var(--info-bg); border-left: 5px solid var(--info-border); }
+        .box-warning { background: var(--warning-bg); border-left: 5px solid var(--warning-border); }
+        .box:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing);
         }
-        .profit {
-            color: #16a34a;
+        .box-group h3 {
+            font-size: 1.75rem;
             font-weight: 600;
-            background-color: #dcfce7;
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
-            display: inline-block;
+            margin-top: calc(var(--spacing) * 1.5);
+            margin-bottom: var(--spacing);
+            color: var(--text);
         }
-        .loss {
-            color: #dc2626;
+        .box h4 {
+            font-size: 1.4rem;
             font-weight: 600;
-            background-color: #fee2e2;
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
-            display: inline-block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
         }
-        .option-chain {
-            overflow-x: auto;
-            margin: 1.8rem 0;
-        }
+        .profit { color: var(--success); font-weight: 600; }
+        .loss { color: var(--error); font-weight: 600; }
+        .option-chain { overflow-x: auto; margin: var(--spacing) 0; }
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin: 1.5rem 0;
-            border-radius: 10px;
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
         }
-        table th, table td {
+        th, td {
             border: 1px solid #e5e7eb;
-            padding: 1.2rem;
+            padding: 1rem;
             text-align: left;
+            font-weight: 400;
         }
-        table th {
-            background: linear-gradient(90deg, #f3f4f6, #e5e7eb);
-            color: #1e40af;
+        th {
+            background: #f3f4f6;
+            color: var(--primary);
             font-weight: 600;
         }
-        table tr {
-            transition: background-color 0.3s ease;
-        }
-        table tr:hover {
-            background-color: #f1f5f9;
-        }
+        tr:hover { background: #f9fafb; }
         footer {
-            background: linear-gradient(90deg, #1e40af, #2563eb);
-            color: #ffffff;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            color: #fff;
             text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
-        footer p {
-            font-size: 1.1rem;
-            font-weight: 300;
-        }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-25px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(25px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            padding: calc(var(--spacing) * 2);
+            margin-top: calc(var(--spacing) * 6);
         }
         @media (max-width: 768px) {
-            header h1 { font-size: 2.2rem; }
-            header p { font-size: 1.2rem; }
-            nav ul { flex-direction: column; gap: 1.2rem; }
-            section { padding: 2rem; }
-            section h2 { font-size: 1.8rem; }
+            header h1 { font-size: 2.25rem; }
+            header p { font-size: 1.25rem; }
+            section h2 { font-size: 2rem; }
         }
         @media (max-width: 480px) {
-            header h1 { font-size: 1.9rem; }
-            section { padding: 1.8rem; }
-            table th, table td { padding: 1rem; font-size: 0.95rem; }
+            p, ul { font-size: 1rem; }
+            th, td { padding: 0.75rem; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -247,25 +210,23 @@
         <h1>Options Basics</h1>
         <p>Learn the fundamentals of options trading with real-world examples.</p>
     </header>
-
     <nav>
         <ul>
             <li><a href="#introduction">Introduction</a></li>
             <li><a href="#what-are-options">What Are Options?</a></li>
-            <li><a href="#buying-vs-selling">Buying vs Selling Options</a></li>
+            <li><a href="#buy-vs-sell">Buying vs Selling</a></li>
             <li><a href="#call-options">Call Options</a></li>
-            <li><a href="#put-options">Put Options</a></li>
+            <li><a href="#put-options">Put Options</a></lli>
             <li><a href="#terminology">Terminology</a></li>
             <li><a href="#math">Basic Math</a></li>
             <li><a href="#mistakes">Beginner Mistakes</a></li>
             <li><a href="#conclusion">Conclusion</a></li>
         </ul>
     </nav>
-
     <main>
-        <section id="introduction" style="--section-index: 1;">
+        <section id="introduction">
             <h2>Introduction</h2>
-            <p>Hello! I'm a software engineer and options trader with years of experience. In this video, you'll learn:</p>
+            <p>Hello! I'm a software engineer and options trader. In this video, you'll learn:</p>
             <ul>
                 <li>What options are and how they differ from stocks</li>
                 <li>The basics of call and put options</li>
@@ -273,97 +234,129 @@
                 <li>Common pitfalls and best practices</li>
             </ul>
         </section>
-
-        <section id="what-are-options" style="--section-index: 2;">
+        <section id="what-are-options">
             <h2>What Are Options?</h2>
-            <p>Options are contracts that give you the <strong>right, but not the obligation</strong>, to buy or sell an underlying asset (like stocks) at a specific price by a certain date. Each option contract typically represents 100 shares of the underlying stock.</p>
-            <p>The "option" aspect means flexibility—you can choose to exercise the contract or let it expire. Unlike owning stocks, options don't give you ownership, just rights.</p>
-            <p><strong>Analogy:</strong> Think of an option like a restaurant reservation. You secure a table (right), but you're not obligated to show up. If you do, you eat; if not, you lose the reservation fee.</p>
+            <p>Options are contracts giving you the <strong>right, but not the obligation</strong>, to buy or sell an underlying asset at a set price on or before expiration.</p>
+            <div class="box box-info">
+                <p><strong>Key Point:</strong> One option contract typically controls <strong>100 shares</strong> of the underlying stock.</p>
+                <p><strong>Analogy:</strong> Like a restaurant reservation—you secure the table, but you don't have to show up.</p>
+            </div>
         </section>
-
-        <section id="buying-vs-selling" style="--section-index: 3;">
-            <h2>Buying vs Selling Options</h2>
-            <p>Options contracts can be <strong>bought</strong> or <strong>sold</strong> for both calls and puts. Buying (going long) a call gives you the right to buy 100 shares at the strike price before expiration, while selling (writing) a call obligates you to sell 100 shares at that price if exercised. Likewise, buying a put gives you the right to sell 100 shares, and selling a put obligates you to purchase 100 shares if exercised. Buyers pay the premium up‑front; sellers receive the premium but accept the associated obligation.</p>
-        </section>
-
-        <section id="call-options" style="--section-index: 4;">
+        <section id="buy-vs-sell">
+    <h2>Buying vs. Selling Calls and Puts</h2>
+    <p>Four fundamental strategies: buyers pay a premium, sellers receive a premium and accept an obligation.</p>
+    <div class="box-group">
+        <h3>Calls</h3>
+        <div class="grid-2x2">
+            <div class="box box-info">
+                <h4>Buy Call</h4>
+                <ul>
+                    <li>Right to buy 100 shares at the strike price</li>
+                    <li>Premium paid upfront</li>
+                    <li>Profits when stock price exceeds strike price plus premium</li>
+                    <li>Maximum loss is the premium paid; profit potential is unlimited</li>
+                </ul>
+            </div>
+            <div class="box box-warning">
+                <h4>Sell Call</h4>
+                <ul>
+                    <li>Obligation to sell 100 shares at the strike price if exercised</li>
+                    <li>Premium received upfront</li>
+                    <li>Profit limited to premium received; risk is potentially unlimited</li>
+                </ul>
+            </div>
+        </div>
+        <h3>Puts</h3>
+        <div class="grid-2x2">
+            <div class="box box-info">
+                <h4>Buy Put</h4>
+                <ul>
+                    <li>Right to sell 100 shares at the strike price</li>
+                    <li>Premium paid upfront</li>
+                    <li>Profits when stock price falls below strike price minus premium</li>
+                    <li>Maximum loss is the premium paid; profit potential is strike price minus premium</li>
+                </ul>
+            </div>
+            <div class="box box-warning">
+                <h4>Sell Put</h4>
+                <ul>
+                    <li>Obligation to buy 100 shares at the strike price if exercised</li>
+                    <li>Premium received upfront</li>
+                    <li>Profit limited to premium received; risk is strike price minus premium</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+        <section id="call-options">
             <h2>Call Options Explained</h2>
-            <p>A <strong>call option</strong> gives you the right to <strong>buy</strong> shares at a specific price, called the <strong>strike price</strong>, before the <strong>expiration date</strong>. You pay a <strong>premium</strong> for this right. Calls are profitable when the stock price rises above the strike price plus the premium.</p>
-            <div class="example">
-                <p><strong>Example:</strong> Apple is trading at $200. You buy a $210 call option for a $5 premium. If Apple rises to $250, you can buy at $210, making a <span class="profit">profit</span> (minus premium). If it stays below $210, you lose the <span class="loss">premium</span>.</p>
+            <p>You get the <strong>right to buy</strong> shares at a set strike price. Pay a premium for this right.</p>
+            <div class="box box-info">
+                <p><strong>Example:</strong> XYZ at $100. Buy $105 call for $3 premium.</p>
+                <ul>
+                    <li>If XYZ price goes above $108, profit equals the difference between stock price and (strike price plus premium)</li>
+                    <li>If XYZ price stays at or below $108, loss is the premium paid ($3)</li>
+                </ul>
             </div>
         </section>
-
-        <section id="put-options" style="--section-index: 5;">
+        <section id="put-options">
             <h2>Put Options Explained</h2>
-            <p>A <strong>put option</strong> gives you the right to <strong>sell</strong> shares at the strike price before expiration. You pay a premium, and puts are profitable when the stock price falls below the strike price minus the premium.</p>
-            <div class="example">
-                <p><strong>Example:</strong> Tesla is trading at $150. You buy a $145 put option for a $4 premium. If Tesla drops to $100, you can sell at $145, earning a <span class="profit">profit</span>. If it stays above $145, you lose the <span class="loss">premium</span>.</p>
+            <p>You get the <strong>right to sell</strong> shares at a set strike price. Pay a premium for this right.</p>
+            <div class="box box-info">
+                <p><strong>Example:</strong> XYZ at $100. Buy $95 put for $2 premium.</p>
+                <ul>
+                    <li>If XYZ price falls below $93, profit equals the difference between strike price and stock price minus premium</li>
+                    <li>If XYZ price stays at or above $93, loss is the premium paid ($2)</li>
+                </ul>
             </div>
         </section>
-
-        <section id="terminology" style="--section-index: 6;">
+        <section id="terminology">
             <h2>Options Terminology</h2>
             <ul>
-                <li><strong>Strike Price:</strong> The fixed price at which you can buy (call) or sell (put) the stock.</li>
-                <li><strong>Premium:</strong> The cost of the option contract.</li>
-                <li><strong>Expiration Date:</strong> The date the option contract expires.</li>
-                <li><strong>In‑the‑Money (ITM):</strong> Call: stock price &gt; strike price; Put: stock price &lt; strike price.</li>
-                <li><strong>Out‑of‑the‑Money (OTM):</strong> Call: stock price &lt; strike price; Put: stock price &gt; strike price.</li>
-                <li><strong>At‑the‑Money (ATM):</strong> Stock price ≈ strike price.</li>
+                <li><strong>Strike Price:</strong> Price at which you can buy (call) or sell (put).</li>
+                <li><strong>Premium:</strong> Cost of the option contract.</li>
+                <li><strong>Expiration Date:</strong> When the option expires.</li>
+                <li><strong>In‑the‑Money (ITM):</strong> Call: stock above strike; Put: stock below strike.</li>
+                <li><strong>Out‑of‑the‑Money (OTM):</strong> Call: stock below strike; Put: stock above strike.</li>
+                <li><strong>At‑the‑Money (ATM):</strong> Stock price is roughly equal to strike price.</li>
             </ul>
-            <p><strong>Option Chain Example:</strong></p>
+            <p><strong>Option Chain:</strong></p>
             <div class="option-chain">
                 <table>
-                    <tr>
-                        <th>Strike</th>
-                        <th>Call Premium</th>
-                        <th>Put Premium</th>
-                        <th>Expiration</th>
-                    </tr>
-                    <tr>
-                        <td>$200</td>
-                        <td>$6.50</td>
-                        <td>$3.20</td>
-                        <td>Dec 2025</td>
-                    </tr>
-                    <tr>
-                        <td>$210</td>
-                        <td>$4.00</td>
-                        <td>$5.10</td>
-                        <td>Dec 2025</td>
-                    </tr>
+                    <thead>
+                        <tr><th>Strike</th><th>Call Prem</th><th>Put Prem</th><th>Expiration</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>$200</td><td>$6.50</td><td>$3.20</td><td>Dec 2025</td></tr>
+                        <tr><td>$210</td><td>$4.00</td><td>$5.10</td><td>Dec 2025</td></tr>
+                    </tbody>
                 </table>
             </div>
         </section>
-
-        <section id="math" style="--section-index: 7;">
+        <section id="math">
             <h2>Basic Options Math</h2>
-            <p><strong>Call Break‑Even:</strong> Strike Price + Premium</p>
-            <p><strong>Put Break‑Even:</strong> Strike Price - Premium</p>
             <ul>
-                <li><strong>Maximum Profit:</strong> Call: Unlimited (as stock price rises); Put: Strike Price - Premium (if stock → $0)</li>
-                <li><strong>Maximum Risk:</strong> The premium paid.</li>
+                <li><strong>Call Break-Even:</strong> Strike price plus premium.</li>
+                <li><strong>Put Break-Even:</strong> Strike price minus premium.</li>
+                <li><strong>Max Profit:</strong> Call: unlimited; Put: strike price minus premium.</li>
+                <li><strong>Max Risk:</strong> Premium paid.</li>
             </ul>
         </section>
-
-        <section id="mistakes" style="--section-index: 8;">
+        <section id="mistakes>
             <h2>Common Beginner Mistakes</h2>
             <ul>
-                <li><strong>Ignoring Implied Volatility:</strong> High volatility increases premiums, affecting profitability.</li>
-                <li><strong>Not Understanding Time Decay:</strong> Options lose value as expiration nears.</li>
-                <li><strong>Buying Far OTM Options:</strong> Cheap but unlikely to profit.</li>
+                <li>Ignoring implied volatility's effect on premiums.</li>
+                <li>Underestimating time decay close to expiration.</li>
+                <li>Buying far out-of-the-money options with low probability.</li>
             </ul>
         </section>
-
-        <section id="conclusion" style="--section-index: 9;">
+        <section id="conclusion">
             <h2>Conclusion & Next Steps</h2>
-            <p><strong>Recap:</strong> Options offer leverage, income, and hedging. Calls and puts have distinct profit scenarios, and understanding terminology and math is key.</p>
-            <p><strong>Practice Safely:</strong> Use paper trading to test strategies without real money.</p>
-            <p><strong>Coming Up:</strong> In the next video, we'll dive into advanced strategies like spreads and straddles.</p>
+            <p><strong>Recap:</strong> Options offer leverage, income, and hedging. Understand calls vs puts, profit scenarios, and core math.</p>
+            <p><strong>Practice:</strong> Use paper trading to test strategies risk-free.</p>
+            <p><strong>Next Video:</strong> Advanced strategies — spreads, straddles, and more.</p>
         </section>
     </main>
-
     <footer>
         <p>© 2025 OptiTrade AI</p>
     </footer>
