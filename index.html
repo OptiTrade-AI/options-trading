@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Options Basics</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"/>
   <link rel="icon" href="/options-trading/option-basics.png" type="image/png">
   <style>
     :root {
@@ -37,50 +38,49 @@
     }
 
     *, *::before, *::after {
-      margin:0; padding:0; box-sizing:border-box;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family:'Poppins',sans-serif;
+      font-family: 'Poppins', sans-serif;
       background: var(--background);
       color: var(--text);
-      line-height:1.6;
-      overflow-x:hidden;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
 
     /*—— HEADER ——*/
     header {
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      color:white;
-      text-align:center;
+      color: white;
+      text-align: center;
       padding: calc(var(--spacing)*4) var(--spacing);
       box-shadow: 0 3px 10px rgba(0,0,0,0.2);
       position: relative;
-      z-index:10;
+      z-index: 10;
     }
-
     header h1 {
       font-size: clamp(2rem,5vw,2.5rem);
-      font-weight:700;
+      font-weight: 700;
       margin-bottom: var(--spacing);
     }
-
     header p {
       font-size: clamp(1rem,3vw,1.25rem);
-      font-weight:500;
-      color:white;
-      opacity:0.9;
-      max-width:700px;
-      margin:0 auto;
+      font-weight: 500;
+      color: white;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
     }
 
-    /*—— MAIN ——*/
+    /*—— MAIN & SECTIONS ——*/
     main {
-      max-width:1100px;
+      max-width: 1100px;
       margin: calc(var(--spacing)*4) auto;
       padding: 0 var(--spacing);
     }
-
     section {
       background: var(--surface);
       border-radius: var(--radius);
@@ -88,170 +88,107 @@
       margin-bottom: calc(var(--spacing)*3);
       box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     }
-
     section h2 {
       font-size: clamp(1.5rem,5vw,2rem);
       color: var(--primary);
       margin-bottom: var(--spacing);
       position: relative;
     }
-
     section h2::after {
-      content:'';
-      position:absolute;
-      bottom:0; left:0;
-      width:60px; height:4px;
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 60px; height: 4px;
       background: var(--primary-light);
-      border-radius:2px;
+      border-radius: 2px;
     }
 
+    /*—— TEXT & LISTS ——*/
     p, ul {
       font-size: clamp(0.9rem,3vw,1rem);
       color: var(--text-muted);
       margin-bottom: var(--spacing);
     }
-
-    ul { padding-left: calc(var(--spacing)*1.5); }
-
+    ul {
+      padding-left: calc(var(--spacing)*1.5);
+    }
     li {
-      margin-bottom:1rem;
+      margin-bottom: 1rem;
       position: relative;
     }
-
     li::before {
-      content:'•';
-      position:absolute;
-      left:-1rem;
+      content: '•';
+      position: absolute;
+      left: -1rem;
       color: var(--primary-light);
-      font-size:1.2rem;
-      line-height:1;
+      font-size: 1.2rem;
+      line-height: 1;
     }
 
+    /*—— BOX STYLES ——*/
     .box {
       border-radius: var(--radius);
       padding: var(--spacing);
       margin: var(--spacing) 0;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-
     .box-info {
       background: var(--info-bg);
-      border-left:4px solid var(--info-border);
+      border-left: 4px solid var(--info-border);
     }
-
     .box-warning {
       background: var(--warning-bg);
-      border-left:4px solid var(--warning-border);
+      border-left: 4px solid var(--warning-border);
     }
-
-    .box:hover, .box:focus {
+    .box:hover,
+    .box:focus {
       transform: translateY(-2px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-      outline:none;
+      outline: none;
     }
 
+    /*—— GRID LAYOUT ——*/
     .grid-2x2 {
-      display:grid;
+      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
-      gap:var(--spacing);
+      gap: var(--spacing);
     }
 
+    /*—— BOX GROUP TITLES ——*/
     .box-group h3 {
       margin-top: var(--spacing);
-      font-size:1.5rem;
+      font-size: 1.5rem;
       color: var(--secondary);
     }
-
     .box h4 {
-      font-size:1.2rem;
+      font-size: 1.2rem;
       color: var(--primary);
-      margin-bottom:0.5rem;
+      margin-bottom: 0.5rem;
     }
-
-    .option-chain {
-      position:relative;
-      overflow-x:auto;
-      margin: var(--spacing) 0;
-    }
-
-    .option-chain::before {
-      content:'← swipe →';
-      position:absolute;
-      top:-1.2rem; left:50%;
-      transform:translateX(-50%);
-      font-size:0.8rem;
-      color:var(--text-muted);
-    }
-
-    table {
-      width:100%;
-      border-collapse: separate;
-      border-spacing:0;
-      border-radius:var(--radius);
-      overflow:hidden;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    th, td {
-      border:1px solid #e0e0e0;
-      padding:0.75rem;
-      text-align:left;
-      font-weight:400;
-      font-size:0.95rem;
-    }
-
-    th {
-      background: var(--background);
-      color: var(--primary);
-      font-weight:600;
-    }
-
-    tr:hover { background: #fafafa; }
 
     /*—— FOOTER ——*/
     footer {
       background: var(--primary);
       color: white;
-      text-align:center;
-      padding:calc(var(--spacing)*2);
+      text-align: center;
+      padding: calc(var(--spacing)*2);
       margin-top: calc(var(--spacing)*4);
     }
 
-    /*—— BACK TO TOP ——*/
-    #back-to-top {
-      position:fixed;
-      bottom: var(--spacing);
-      right: var(--spacing);
-      width:40px; height:40px;
-      border:none;
-      border-radius:50%;
-      background: var(--primary);
-      color:white;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      font-size:1.25rem;
-      cursor:pointer;
-      box-shadow:0 4px 8px rgba(0,0,0,0.2);
-      z-index:15;
-    }
-
-    /*—— MEDIA QUERIES ——*/
+    /*—— RESPONSIVE ——*/
     @media (max-width: 768px) {
-      header h1 { font-size: clamp(1.75rem,6vw,2.25rem); }
-      section h2 { font-size: clamp(1.25rem,6vw,1.75rem); }
+      header h1 {
+        font-size: clamp(1.75rem,6vw,2.25rem);
+      }
+      section h2 {
+        font-size: clamp(1.25rem,6vw,1.75rem);
+      }
     }
 
-    @media (max-width:600px) {
-      .hamburger { display:block; }
-      nav ul { max-height:0; flex-direction:column; }
-      nav ul.open { max-height:100vh; }
-      body.nav-open { overflow:hidden; }
-    }
-
-    @media (max-width:480px) {
-      p, ul    { font-size:0.8rem; }
-      th, td  { padding:0.5rem; font-size:0.8rem; }
+    @media (max-width: 480px) {
+      p, ul {
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
@@ -280,6 +217,16 @@
       </div>
     </section>
 
+    <section id="terminology">
+      <h2>Terminology</h2>
+      <ul>
+        <li><strong>Strike Price:</strong> Price you buy/sell at.</li>
+        <li><strong>Premium:</strong> Cost of contract.</li>
+        <li><strong>Expiration:</strong> Contract expiry date.</li>
+        <li><strong>ITM / OTM / ATM:</strong> In/Out/At‑the‑money.</li>
+      </ul>
+    </section>
+
     <section id="buy-vs-sell">
       <h2>Buying vs. Selling Calls & Puts</h2>
       <div class="box-group">
@@ -290,7 +237,7 @@
             <ul>
               <li>Right to buy 100 shares</li>
               <li>Pay premium up front</li>
-              <li>Profit if price > strike+premium</li>
+              <li>Profit if price > strike + premium</li>
               <li>Max loss = premium; profit unlimited</li>
             </ul>
           </div>
@@ -311,7 +258,7 @@
             <ul>
               <li>Right to sell 100 shares</li>
               <li>Pay premium up front</li>
-              <li>Profit if price < strike–premium</li>
+              <li>Profit if price < strike − premium</li>
               <li>Max loss = premium</li>
             </ul>
           </div>
@@ -320,55 +267,11 @@
             <ul>
               <li>Obligation to buy 100 shares</li>
               <li>Receive premium up front</li>
-              <li>Profit = premium; risk = strike–premium</li>
+              <li>Profit = premium; risk = strike − premium</li>
             </ul>
           </div>
         </div>
       </div>
-    </section>
-
-    <section id="call-options">
-      <h2>Call Options Explained</h2>
-      <p>Right to buy shares at strike price; pay premium upfront.</p>
-      <div class="box box-info">
-        <p><strong>Example:</strong> XYZ at $100. Buy $105 call for $3.</p>
-        <ul>
-          <li>Profit if XYZ > $108</li>
-          <li>Loss = $3 if ≤ $108</li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="put-options">
-      <h2>Put Options Explained</h2>
-      <p>Right to sell shares at strike price; pay premium upfront.</p>
-      <div class="box box-info">
-        <p><strong>Example:</strong> XYZ at $100. Buy $95 put for $2.</p>
-        <ul>
-          <li>Profit if XYZ < $93</li>
-          <li>Loss = $2 if ≥ $93</li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="terminology">
-      <h2>Terminology</h2>
-      <ul>
-        <li><strong>Strike Price:</strong> Price you buy/sell at.</li>
-        <li><strong>Premium:</strong> Cost of contract.</li>
-        <li><strong>Expiration:</strong> Contract expiry date.</li>
-        <li><strong>ITM / OTM / ATM:</strong> In/Out/At‑the‑money.</li>
-      </ul>
-    </section>
-
-    <section id="math">
-      <h2>Basic Math</h2>
-      <ul>
-        <li><strong>Call BE:</strong> strike + premium</li>
-        <li><strong>Put BE:</strong> strike – premium</li>
-        <li><strong>Max Profit:</strong> Call = ∞, Put = strike – premium</li>
-        <li><strong>Max Loss:</strong> premium paid</li>
-      </ul>
     </section>
 
   </main>
@@ -376,30 +279,5 @@
   <footer>
     <p>© 2025 OptiTrade AI</p>
   </footer>
-
-  <!-- Back to Top -->
-  <button id="back-to-top" aria-label="Back to top">↑</button>
-
-  <script>
-    // Mobile nav toggle
-    document.querySelector('.hamburger').addEventListener('click', () => {
-      document.getElementById('nav-list').classList.toggle('open');
-    });
-
-    // Back to top button
-    const backBtn = document.getElementById('back-to-top');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        backBtn.style.display = 'flex';
-        backBtn.style.opacity = '1';
-      } else {
-        backBtn.style.opacity = '0';
-        setTimeout(() => backBtn.style.display = 'none', 300);
-      }
-    });
-    backBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  </script>
 </body>
 </html>
