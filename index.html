@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options 101: Video 1 - Options Basics</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            color: #0f172a;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e40af, #60a5fa);
+            color: #ffffff;
+            text-align: center;
+            padding: 3.5rem 1rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent);
+            opacity: 0.6;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            position: relative;
+            letter-spacing: -0.02em;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        header p {
+            font-size: 1.4rem;
+            font-weight: 300;
+            max-width: 650px;
+            margin: 0 auto;
+            position: relative;
+            animation: fadeInUp 1s ease-out 0.3s;
+            animation-fill-mode: backwards;
+        }
+
+        nav {
+            background-color: #ffffff;
+            padding: 1.3rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #1e40af;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover {
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        main {
+            max-width: 1150px;
+            margin: 3.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 2.8rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            transform: translateY(30px);
+            opacity: 0;
+            animation: slideUp 0.7s ease-out forwards;
+            animation-delay: calc(0.12s * var(--section-index));
+        }
+
+        section h2 {
+            color: #1e40af;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 1.4rem;
+            position: relative;
+            padding-bottom: 0.6rem;
+            letter-spacing: -0.01em;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 2px;
+        }
+
+        section p, section ul {
+            font-size: 1.15rem;
+            margin-bottom: 1.3rem;
+            color: #475569;
+        }
+
+        section ul {
+            padding-left: 2rem;
+        }
+
+        section ul li {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        section ul li::before {
+            content: '◆';
+            color: #3b82f6;
+            position: absolute;
+            left: -1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .example {
+            background-color: #eff6ff;
+            padding: 1.8rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border-left: 5px solid #3b82f6;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .example:hover {
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .profit {
+            color: #16a34a;
+            font-weight: 600;
+            background-color: #dcfce7;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .loss {
+            color: #dc2626;
+            font-weight: 600;
+            background-color: #fee2e2;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            padding: 1rem 2.2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.15rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .option-chain {
+            overflow-x: auto;
+            margin: 1.8rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 1.5rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        table th, table td {
+            border: 1px solid #e5e7eb;
+            padding: 1.2rem;
+            text-align: left;
+        }
+
+        table th {
+            background: linear-gradient(90deg, #f3f4f6, #e5e7eb);
+            color: #1e40af;
+            font-weight: 600;
+        }
+
+        table tr {
+            transition: background-color 0.3s ease;
+        }
+
+        table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        footer {
+            background: linear-gradient(90deg, #1e40af, #2563eb);
+            color: #ffffff;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            header p {
+                font-size: 1.2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+
+            section {
+                padding: 2rem;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            .download-btn {
+                padding: 0.9rem 2rem;
+                font-size: 1.05rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.9rem;
+            }
+
+            section {
+                padding: 1.8rem;
+            }
+
+            table th, table td {
+                padding: 1rem;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Options 101: Video 1 - Options Basics</h1>
+        <p>Learn the fundamentals of options trading with real-world examples and OptiTrade AI</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#what-are-options">What Are Options?</a></li>
+            <li><a href="#call-options">Call Options</a></li>
+            <li><a href="#put-options">Put Options</a></li>
+            <li><a href="#terminology">Terminology</a></li>
+            <li><a href="#math">Basic Math</a></li>
+            <li><a href="#mistakes">Beginner Mistakes</a></li>
+            <li><a href="#conclusion">Conclusion</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="introduction" style="--section-index: 1;">
+            <h2>Introduction</h2>
+            <p>Hello! I'm a software engineer and options trader with years of experience in both fields. I've developed <strong>OptiTrade AI</strong>, an app that simplifies options trading by identifying profitable opportunities and visualizing key metrics.</p>
+            <p>Options are powerful tools for <strong>leverage</strong>, generating <strong>income</strong>, and <strong>hedging</strong> against risks. In this video, you'll learn:</p>
+            <ul>
+                <li>What options are and how they differ from stocks</li>
+                <li>The basics of call and put options</li>
+                <li>Key terminology and simple math</li>
+                <li>Common pitfalls and how OptiTrade AI helps avoid them</li>
+            </ul>
+        </section>
+
+        <section id="what-are-options" style="--section-index: 2;">
+            <h2>What Are Options?</h2>
+            <p>Options are contracts that give you the <strong>right, but not the obligation</strong>, to buy or sell an underlying asset (like stocks) at a specific price by a certain date.</p>
+            <p>The "option" aspect means flexibility—you can choose to exercise the contract or let it expire. Unlike owning stocks, options don't give you ownership, just rights.</p>
+            <p><strong>Analogy:</strong> Think of an option like a restaurant reservation. You secure a table (right), but you're not obligated to show up. If you do, you get the table at the agreed time; if not, you lose the booking fee.</p>
+        </section>
+
+        <section id="call-options" style="--section-index: 3;">
+            <h2>Call Options Explained</h2>
+            <p>A <strong>call option</strong> gives you the right to <strong>buy</strong> shares at a specific price, called the <strong>strike price</strong>, before the <strong>expiration date</strong>.</p>
+            <p>You pay a <strong>premium</strong> (cost of the option) for this right. Calls are profitable when the stock price rises above the strike price plus the premium.</p>
+            <div class="example">
+                <p><strong>Example:</strong> Apple is trading at $200. You buy a $210 call option for a $5 premium. If Apple rises to $250, you can buy shares at $210, making a <span class="profit">profit</span> (minus the premium). If it stays below $210, you lose the <span class="loss">premium</span>.</p>
+            </div>
+            <p>OptiTrade AI visualizes call opportunities by highlighting in-the-money options and potential profits in <span class="profit">green</span>.</p>
+        </section>
+
+        <section id="put-options" style="--section-index: 4;">
+            <h2>Put Options Explained</h2>
+            <p>A <strong>put option</strong> gives you the right to <strong>sell</strong> shares at the strike price before the expiration date.</p>
+            <p>Puts are profitable when the stock price falls below the strike price minus the premium.</p>
+            <div class="example">
+                <p><strong>Example:</strong> Tesla is trading at $150. You buy a $145 put option for a $4 premium. If Tesla drops to $100, you can sell at $145, earning a <span class="profit">profit</span>. If it stays above $145, you lose the <span class="loss">premium</span>.</p>
+            </div>
+            <p>OptiTrade AI identifies put opportunities, showing potential profits in <span class="profit">green</span> and losses in <span class="loss">red</span>.</p>
+        </section>
+
+        <section id="terminology" style="--section-index: 5;">
+            <h2>Options Terminology</h2>
+            <ul>
+                <li><strong>Strike Price:</strong> The fixed price at which you can buy (call) or sell (put) the stock.</li>
+                <li><strong>Premium:</strong> The cost of the option contract.</li>
+                <li><strong>Expiration Date:</strong> The date the option contract expires.</li>
+                <li><strong>In-the-Money (ITM):</strong> Call: stock price >ariat strike price; Put: stock price < strike price.</li>
+                <li><strong>Out-of-the-Money (OTM):</strong> Call: stock price < strike price; Put: stock price > strike price.</li>
+                <li><strong>At-the-Money (ATM):</strong> Stock price ≈ strike price.</li>
+            </ul>
+            <p><strong>Option Chain Example:</strong></p>
+            <div class="option-chain">
+                <table>
+                    <tr>
+                        <th>Strike</th>
+                        <th>Call Premium</th>
+                        <th>Put Premium</th>
+                        <th>Expiration</th>
+                    </tr>
+                    <tr>
+                        <td>$200</td>
+                        <td>$6.50</td>
+                        <td>$3.20</td>
+                        <td>Dec 2025</td>
+                    </tr>
+                    <tr>
+                        <td>$210</td>
+                        <td>$4.00</td>
+                        <td>$5.10</td>
+                        <td>Dec 2025</td>
+                    </tr>
+                </table>
+            </div>
+            <p>OptiTrade AI simplifies reading option chains with color-coded ITM/OTM indicators.</p>
+        </section>
+
+        <section id="math" style="--section-index: 6;">
+            <h2>Basic Options Math</h2>
+            <p><strong>Call Break-Even:</strong> Strike Price + Premium</p>
+            <p><strong>Put Break-Even:</strong> Strike Price - Premium</p>
+            <p><strong>Maximum Profit:</strong></p>
+            <ul>
+                <li>Call: Unlimited (as stock price rises)</li>
+                <li>Put: Strike Price - Premium (if stock price → $0)</li>
+            </ul>
+            <p><strong>Maximum Risk:</strong> The premium paid for the option.</p>
+            <p>OptiTrade AI automatically calculates break-even points and profit/loss scenarios, displayed in <span class="profit">green</span> for profits and <span class="loss">red</span> for losses.</p>
+        </section>
+
+        <section id="mistakes" style="--section-index: 7;">
+            <h2>Common Beginner Mistakes</h2>
+            <ul>
+                <li><strong>Ignoring Implied Volatility:</strong> High volatility increases premiums, affecting profitability.</li>
+                <li><strong>Not Understanding Time Decay:</strong> Options lose value as expiration nears.</li>
+                <li><strong>Buying Far OTM Options:</strong> Cheap but unlikely to profit.</li>
+            </ul>
+            <p>OptiTrade AI flags high-volatility options, tracks time decay, and filters out risky OTM options.</p>
+        </section>
+
+        <section id="conclusion" style="--section-index: 8;">
+            <h2>Conclusion & Preview</h2>
+            <p><strong>Recap:</strong> Options offer flexibility for leverage, income, and hedging. Calls and puts have distinct profit scenarios, and understanding terminology and math is key.</p>
+            <p><strong>Practice Safely:</strong> Use paper trading to test strategies without real money.</p>
+            <p><strong>Next Video:</strong> We'll dive into advanced strategies like spreads and straddles.</p>
+            <p><strong>Call to Action:</strong> Try OptiTrade AI to analyze options with ease. Download our free PDF cheat sheet below to keep key concepts handy!</p>
+            <a href="#signup" class="download-btn">Download PDF Cheat Sheet</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 OptiTrade AI. All rights reserved.</p>
+    </footer>
+</body>
+</html>
