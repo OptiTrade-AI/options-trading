@@ -1,229 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Options 101: Video 1 - Options Basics</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <style>
-        :root {
-            --radius: 12px;
-            --spacing: 1rem;
-            --primary: #0d9488; /* Teal */
-            --primary-light: #9333ea; /* Purple */
-            --background: #ffffff;
-            --surface: #f4f5f7; /* Light gray */
-            --text: #1f2937; /* Dark gray */
-            --text-muted: #6b7280; /* Mid gray */
-            --info-bg: #cffafe; /* Teal-100 */
-            --info-border: #06b6d4; /* Teal-500 */
-            --warning-bg: #ffedd5; /* Amber-100 */
-            --warning-border: #fbbf24; /* Amber-400 */
-            --success: #16a34a;
-            --error: #dc2626;
-        }
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--surface);
-            color: var(--text);
-            line-height: 1.7;
-            overflow-x: hidden;
-        }
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: #fff;
-            text-align: center;
-            padding: calc(var(--spacing) * 4) var(--spacing);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        }
-        header h1 {
-            font-size: 2.75rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: var(--spacing);
-        }
-        header p {
-            font-size: 1.5rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.95);
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.4;
-        }
-        nav {
-            background: var(--background);
-            padding: var(--spacing);
-            position: sticky;
-            top: 0;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-            z-index: 10;
-        }
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: calc(var(--spacing) * 2);
-            flex-wrap: wrap;
-        }
-        nav a {
-            text-decoration: none;
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 1rem;
-            padding-bottom: 4px;
-            transition: color 0.3s;
-        }
-        nav a:hover { color: var(--primary-light); }
-        nav a::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 3px;
-            background: var(--primary-light);
-            transition: width 0.3s;
-        }
-        nav a:hover::after { width: 100%; }
-        main {
-            max-width: 1200px;
-            margin: calc(var(--spacing) * 4) auto;
-            padding: 0 var(--spacing);
-        }
-        section {
-            background: var(--background);
-            border-radius: var(--radius);
-            padding: calc(var(--spacing) * 2.5);
-            margin-bottom: calc(var(--spacing) * 4);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
-        section h2 {
-            color: var(--primary);
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing);
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-        section h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 80px;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary-light), var(--primary));
-            border-radius: 2px;
-        }
-        p, ul {
-            font-size: 1.15rem;
-            font-weight: 400;
-            color: var(--text-muted);
-            margin-bottom: var(--spacing);
-        }
-        ul { padding-left: calc(var(--spacing) * 1.5); }
-        li {
-            margin-bottom: 0.75rem;
-            position: relative;
-        }
-        li::before {
-            content: '•';
-            color: var(--primary-light);
-            position: absolute;
-            left: -1.2rem;
-            font-size: 1.2rem;
-            line-height: 1;
-        }
-        .box {
-            border-radius: var(--radius);
-            padding: var(--spacing);
-            margin: var(--spacing) 0;
-            transition: transform 0.3s;
-        }
-        .box-info { background: var(--info-bg); border-left: 5px solid var(--info-border); }
-        .box-warning { background: var(--warning-bg); border-left: 5px solid var(--warning-border); }
-        .box:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .grid-2x2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: var(--spacing);
-        }
-        .box-group h3 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-top: calc(var(--spacing) * 1.5);
-            margin-bottom: var(--spacing);
-            color: var(--text);
-        }
-        .box h4 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-        .profit { color: var(--success); font-weight: 600; }
-        .loss { color: var(--error); font-weight: 600; }
-        .option-chain { overflow-x: auto; margin: var(--spacing) 0; }
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-        }
-        th, td {
-            border: 1px solid #e5e7eb;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 400;
-        }
-        th {
-            background: #f3f4f6;
-            color: var(--primary);
-            font-weight: 600;
-        }
-        tr:hover { background: #f9fafb; }
-        footer {
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            color: #fff;
-            text-align: center;
-            padding: calc(var(--spacing) * 2);
-            margin-top: calc(var(--spacing) * 6);
-        }
-        @media (max-width: 768px) {
-            header h1 { font-size: 2.25rem; }
-            header p { font-size: 1.25rem; }
-            section h2 { font-size: 2rem; }
-        }
-        @media (max-width: 480px) {
-            p, ul { font-size: 1rem; }
-            th, td { padding: 0.75rem; font-size: 0.85rem; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Options 101: Video 1 - Options Basics</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"/>
+  <style>
+    :root {
+      --radius: 12px;
+      --spacing: 1rem;
+
+      /* Dark “code editor” background */
+      --background: #0f1419;
+      --surface:    #1e252b;
+
+      /* Neon accents */
+      --primary:       #61dafb; /* React blue */
+      --primary-light: #21a1f1; 
+      
+      /* Text */
+      --text:       #bbc2cf; /* off-white */
+      --text-muted: #888caa; /* gray */
+
+      /* Info / Warning stripes */
+      --info-bg:     #1b2b34;
+      --info-border: #56b6c2;
+      --warning-bg:  #3e2e35;
+      --warning-border: #e5c07b;
+
+      /* Success / Error */
+      --success: #98c379;
+      --error:   #e06c75;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      color: #fff;
+      text-align: center;
+      padding: calc(var(--spacing) * 4) var(--spacing);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    header h1 {
+      font-size: 2.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: var(--spacing);
+    }
+
+    header p {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    nav {
+      background: var(--background);
+      padding: var(--spacing);
+      position: sticky;
+      top: 0;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+      z-index: 10;
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      gap: calc(var(--spacing) * 2);
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1rem;
+      padding-bottom: 4px;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--primary-light);
+    }
+
+    nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 3px;
+      background: var(--primary-light);
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: calc(var(--spacing) * 4) auto;
+      padding: 0 var(--spacing);
+    }
+
+    section {
+      background: var(--background);
+      border-radius: var(--radius);
+      padding: calc(var(--spacing) * 2.5);
+      margin-bottom: calc(var(--spacing) * 4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    section h2 {
+      color: var(--primary);
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing);
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 80px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      border-radius: 2px;
+    }
+
+    p, ul {
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: var(--spacing);
+    }
+
+    ul {
+      padding-left: calc(var(--spacing) * 1.5);
+    }
+
+    li {
+      margin-bottom: 0.75rem;
+      position: relative;
+    }
+
+    li::before {
+      content: '•';
+      color: var(--primary-light);
+      position: absolute;
+      left: -1.2rem;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .box {
+      border-radius: var(--radius);
+      padding: var(--spacing);
+      margin: var(--spacing) 0;
+      transition: transform 0.3s;
+    }
+
+    .box-info {
+      background: var(--info-bg);
+      border-left: 5px solid var(--info-border);
+    }
+
+    .box-warning {
+      background: var(--warning-bg);
+      border-left: 5px solid var(--warning-border);
+    }
+
+    .box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--spacing);
+    }
+
+    .box-group h3 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-top: calc(var(--spacing) * 1.5);
+      margin-bottom: var(--spacing);
+      color: var(--text);
+    }
+
+    .box h4 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .profit {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .loss {
+      color: var(--error);
+      font-weight: 600;
+    }
+
+    .option-chain {
+      overflow-x: auto;
+      margin: var(--spacing) 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    th, td {
+      border: 1px solid #2e3b44;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 400;
+    }
+
+    th {
+      background: #28343f;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: #2e3b44;
+    }
+
+    footer {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      color: #fff;
+      text-align: center;
+      padding: calc(var(--spacing) * 2);
+      margin-top: calc(var(--spacing) * 6);
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.25rem; }
+      header p  { font-size: 1.25rem; }
+      section h2 { font-size: 2rem; }
+    }
+
+    @media (max-width: 480px) {
+      p, ul      { font-size: 1rem; }
+      th, td    { padding: 0.75rem; font-size: 0.85rem; }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Options Basics</h1>
-        <p>Learn the fundamentals of options trading with real-world examples.</p>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#what-are-options">What Are Options?</a></li>
-            <li><a href="#buy-vs-sell">Buying vs Selling</a></li>
-            <li><a href="#call-options">Call Options</a></li>
-            <li><a href="#put-options">Put Options</a></lli>
-            <li><a href="#terminology">Terminology</a></li>
-            <li><a href="#math">Basic Math</a></li>
-            <li><a href="#mistakes">Beginner Mistakes</a></li>
-            <li><a href="#conclusion">Conclusion</a></li>
-        </ul>
-    </nav>
-    <main>
+  <header>
+    <h1>Options Basics</h1>
+    <p>Learn the fundamentals of options trading with real-world examples.</p>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#what-are-options">What Are Options?</a></li>
+      <li><a href="#buy-vs-sell">Buying vs Selling</a></li>
+      <li><a href="#call-options">Call Options</a></li>
+      <li><a href="#put-options">Put Options</a></li>
+      <li><a href="#terminology">Terminology</a></li>
+      <li><a href="#math">Basic Math</a></li>
+      <li><a href="#mistakes">Beginner Mistakes</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ul>
+  </nav>
+  <main>
         <section id="introduction">
             <h2>Introduction</h2>
             <p>Hello! I'm a software engineer and options trader. In this video, you'll learn:</p>
