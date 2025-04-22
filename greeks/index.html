@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option Greeks &amp; Strategies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #FF8500;
+      --background-color: #121212;
+      --card-bg: #2A2A2A;
+      --text-color: #E0E0E0;
+      --muted-color: #AAAAAA;
+      --max-width: 1200px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--background-color);
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: linear-gradient(135deg, #1E1E1E, #121212);
+    }
+    header h1 { font-size: 3rem; color: var(--primary-color); }
+    header p { margin-top: .5rem; color: var(--muted-color); }
+    .container { max-width: var(--max-width); margin: 2rem auto; padding: 0 1rem; }
+    .grid { display: grid; gap: 1rem; }
+    .greeks-grid { grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); }
+    .usecases-grid { grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); margin-top: 2rem; }
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: transform .2s, background .2s;
+    }
+    .card:hover { transform: translateY(-4px); background: #333; }
+    .card h2 { font-size: 1.3rem; color: var(--primary-color); margin-bottom: .5rem; }
+    .card p  { color: var(--text-color); font-size: .95rem; }
+    .section-title { margin: 2rem 0 1rem; font-size: 2rem; text-align: center; color: var(--primary-color); }
+    /* Table */
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: .75rem 1rem; text-align: left; }
+    th { background: var(--card-bg); color: var(--muted-color); text-transform: uppercase; font-size: .85rem; }
+    tr:nth-child(even) { background: #1A1A1A; }
+    td { border-bottom: 1px solid #2A2A2A; }
+    /* Modals */
+    .modal-overlay {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.7);
+      display: none; align-items:center; justify-content:center; padding:1rem;
+    }
+    .modal-overlay.active { display:flex; }
+    .modal { background: var(--card-bg); padding:1.5rem; border-radius:8px; max-width:500px; width:100%; position:relative; }
+    .modal h3 { margin-bottom: .75rem; color: var(--primary-color); }
+    .modal ul { margin-left:1rem; }
+    .modal li { margin-bottom:.5rem; }
+    .close-btn { position:absolute; top:.5rem; right:.5rem; background:none; border:none; color:var(--muted-color); font-size:1.5rem; cursor:pointer; }
+    footer { text-align:center; padding:1rem; color: var(--muted-color); margin-top:3rem; font-size:.8rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Option Greeks &amp; Strategies</h1>
+    <p>Explore each Greek, practical use‑cases, and real‑world strategy examples.</p>
+  </header>
+  <div class="container">
+    <!-- Core Greeks -->
+    <div class="section-title">Core Greeks</div>
+    <div class="grid greeks-grid">
+      <div class="card" data-modal-target="#delta-modal"><h2>Delta (Δ)</h2><p>Price change per $1 move in underlying.</p></div>
+      <div class="card" data-modal-target="#gamma-modal"><h2>Gamma (Γ)</h2><p>How Delta changes per $1 move.</p></div>
+      <div class="card" data-modal-target="#theta-modal"><h2>Theta (Θ)</h2><p>Daily time decay of value.</p></div>
+      <div class="card" data-modal-target="#vega-modal"><h2>Vega (ν)</h2><p>Price change per 1% vol move.</p></div>
+      <div class="card" data-modal-target="#rho-modal"><h2>Rho (ρ)</h2><p>Price change per 1% rate move.</p></div>
+    </div>
+    <!-- Practical Use‑Cases -->
+    <div class="section-title">Practical Use‑Cases</div>
+    <div class="grid usecases-grid">
+      <div class="card" data-modal-target="#hedge-modal"><h2>Delta Hedging</h2><p>Neutralize directional risk with offsetting positions.</p></div>
+      <div class="card" data-modal-target="#vol-modal"><h2>Volatility Trading</h2><p>Capitalize on shifts in implied volatility.</p></div>
+      <div class="card" data-modal-target="#pro-modal"><h2>Advanced Greeks</h2><p>Explore Vanna, Vomma, Charm &amp; Speed.</p></div>
+    </div>
+    <!-- Summary Table -->
+    <div class="section-title">Greek Signals Summary</div>
+    <table>
+      <thead>
+        <tr><th>Greek</th><th>Up Signal</th><th>Down Signal</th><th>Trade Idea</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Delta</td><td>Deep ITM calls</td><td>Deep ITM puts</td><td>Hedge positions</td></tr>
+        <tr><td>Gamma</td><td>High Γ → sharp moves</td><td>Low Γ → steady</td><td>Scalping &amp; spreads</td></tr>
+        <tr><td>Theta</td><td>High Θ → sell premium</td><td>Low Θ → buy premium</td><td>Time decay plays</td></tr>
+        <tr><td>Vega</td><td>High ν → vol crush</td><td>Low ν → vol pop</td><td>Straddles/strangles</td></tr>
+        <tr><td>Rho</td><td>Rising rates</td><td>Falling rates</td><td>Interest‑rate trades</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modals: Core Greeks -->
+  <div class="modal-overlay" id="delta-modal">
+    <div class="modal">
+      <button class="close-btn" data-close>&times;</button>
+      <h3>Delta (Δ)</h3>
+      <ul><li>Call: $100→$101, Δ=0.50 → Option +$0.50</li><li>Put: $50→$51, Δ=-0.40 → Option -$0.40</li></ul>
+    </div>
+  </div>
+  <div class="modal-overlay" id="gamma-modal">
+    <div class="modal">
+      <button class="close-btn" data-close>&times;</button>
+      <h3>Gamma (Γ)</h3>
+      <ul><li>$100→$101, start Δ=0.40, Γ=0.10 → Δ→0.50</li><li>Measures Δ acceleration.</li></ul>
+    </div>
+  </div>
+  <div class="modal-overlay" id="theta-modal">
+    <div class="modal">
+      <button class="close-btn" data-close>&times;</button>
+      <h3>Theta (Θ)</h3>
+      <ul><li>Option $2.00, Θ=-0.05 → $1.95 next day</li><li>Tracks daily time decay.</li></ul>
+    </div>
+  </div>
+  <div class="modal-overlay" id="vega-modal">
+    <div class="modal">
+      <button class="close-btn" data-close>&times;</button>
+      <h3>Vega (ν)</h3>
+      <ul><li>Vol 20%→21%, ν=0.10 → Option +$0.10</li><li>Sensitivity to IV changes.</li></ul>
+    </div>
+  </div>
+  <div class="modal-overlay" id="rho-modal">
+    <div class="modal">
+      <button class="close-btn" data-close>&times;</button>
+      <h3>Rho (ρ)</h3>
+      <ul><li>Rates 2%→3%, ρ=0.05 → Option +$0.05</li><li>Rate impact on price.</li></ul>
+    </div>
+  </div>
+
+  <!-- Modals: Use‑Cases & Pro Greeks -->
+  <div class="modal-overlay" id="hedge-modal">
+    <div class="modal">
+      <button class="close-btn" data-close>&times;</button>
+      <h3>Delta Hedging</h3>
+      <ul><li>Goal: Net Δ ≈ 0 to be neutral.</li><li>Offset positions to protect.</li></ul>
+    </div>
+  </div>
+  <div class="modal-overlay" id="vol-modal">
+    <div class="modal">
+      <button class="close-btn" data-close>&times;</button>
+      <h3>Volatility Trading</h3>
+      <ul><li>High IV pre‑earnings → straddles</li><li>Low IV post‑earnings → sell premium</li></ul>
+    </div>
+  </div>
+  <div class="modal-overlay" id="pro-modal">
+    <div class="modal">
+      <button class="close-btn" data-close>&times;</button>
+      <h3>Advanced Greeks</h3>
+      <ul><li>Vanna: Δ sensitivity to vol</li><li>Vomma: Vega sensitivity to vol</li><li>Charm &amp; Speed details</li></ul>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('[data-modal-target]').forEach(btn =>
+      btn.addEventListener('click', () =>
+        document.querySelector(btn.dataset.modalTarget).classList.add('active')
+      )
+    );
+    document.querySelectorAll('[data-close]').forEach(btn =>
+      btn.addEventListener('click', () =>
+        btn.closest('.modal-overlay').classList.remove('active')
+      )
+    );
+    document.querySelectorAll('.modal-overlay').forEach(overlay =>
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) overlay.classList.remove('active');
+      })
+    );
+  </script>
+
+  <footer>© 2025 OptiTrade AI</footer>
+</body>
+</html>

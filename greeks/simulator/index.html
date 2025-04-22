@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greeks Simulator &amp; Scenario Walkthrough</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { background: #121212; color: #E0E0E0; font-family: 'Poppins', sans-serif; margin: 0; padding: 1rem; }
+    h1 { text-align:center; color: #FF8500; }
+    .sim-container { max-width: 800px; margin: 2rem auto; background: #1E1E1E; padding: 1.5rem; border-radius: 8px; }
+    .slider-group { margin-bottom: 1.25rem; }
+    label { display:block; margin-bottom: 0.25rem; color: #AAAAAA; }
+    input[type=range] { width: 100%; }
+    .value-display { text-align: right; font-weight:600; }
+    .greeks-output { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap:1rem; margin-top:1.5rem; }
+    .greek-box { background:#2A2A2A; padding:0.75rem; border-radius:6px; text-align:center; }
+    .greek-box h3 { margin:0; color:#FF8500; }
+    .greek-box p { margin:0.5rem 0 0; font-size:1.25rem; }
+    .scenario { margin-top:2rem; background:#1F1F1F; padding:1rem; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <h1>Interactive Greeks Simulator</h1>
+  <div class="sim-container">
+    <!-- Sliders -->
+    <div class="slider-group">
+      <label for="price">Underlying Price ($): <span id="price-val">100</span></label>
+      <input type="range" id="price" min="50" max="150" step="1" value="100">
+    </div>
+    <div class="slider-group">
+      <label for="strike">Strike Price ($): <span id="strike-val">100</span></label>
+      <input type="range" id="strike" min="50" max="150" step="1" value="100">
+    </div>
+    <div class="slider-group">
+      <label for="days">Days to Expiration: <span id="days-val">30</span></label>
+      <input type="range" id="days" min="1" max="365" step="1" value="30">
+    </div>
+    <div class="slider-group">
+      <label for="vol">Implied Volatility (%): <span id="vol-val">20</span></label>
+      <input type="range" id="vol" min="5" max="100" step="1" value="20">
+    </div>
+    <div class="slider-group">
+      <label for="rate">Risk-Free Rate (%): <span id="rate-val">2</span></label>
+      <input type="range" id="rate" min="0" max="10" step="0.1" value="2">
+    </div>
+    <!-- Greeks Output -->
+    <div class="greeks-output">
+      <div class="greek-box"><h3>Delta</h3><p id="greek-delta">0.50</p></div>
+      <div class="greek-box"><h3>Gamma</h3><p id="greek-gamma">0.02</p></div>
+      <div class="greek-box"><h3>Theta</h3><p id="greek-theta">-0.03</p></div>
+      <div class="greek-box"><h3>Vega</h3><p id="greek-vega">0.15</p></div>
+      <div class="greek-box"><h3>Rho</h3><p id="greek-rho">0.05</p></div>
+    </div>
+    <!-- Scenario Text -->
+    <div class="scenario">
+      <h2>Scenario Walkthrough</h2>
+      <p>Use the sliders above to simulate an option contract on a stock. Adjust the underlying price, strike price, time to expiration, volatility, and interest rate to see how each Greek responds in real time. This helps you understand:</p>
+      <ul>
+        <li>How Delta reacts to moneyness (ITM vs OTM).</li>
+        <li>Why Gamma spikes near expiration or at the money.</li>
+        <li>The impact of time decay on Theta as days decrease.</li>
+        <li>Vega's sensitivity to changing volatility before events.</li>
+        <li>How interest rates influence Rho over longer expirations.</li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    // Error function for normal CDF
+    function erf(x) {
+      var sign = x >= 0 ? 1 : -1;
+      x = Math.abs(x);
+      var a1=0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429, p=0.3275911;
+      var t = 1/(1+p*x);
+      var y = 1 - ((((a5*t + a4)*t + a3)*t + a2)*t + a1)*t*Math.exp(-x*x);
+      return sign*y;
+    }
+    function normCDF(x) {
+      return (1 + erf(x/Math.sqrt(2))) / 2;
+    }
+    function updateGreeks() {
+      var S = parseFloat(price.value);
+      var K = parseFloat(strike.value);
+      var T = parseFloat(days.value)/365;
+      var r = parseFloat(rate.value)/100;
+      var sigma = parseFloat(vol.value)/100;
+      var d1 = (Math.log(S/K) + (r+0.5*sigma*sigma)*T) / (sigma*Math.sqrt(T));
+      var d2 = d1 - sigma*Math.sqrt(T);
+      var delta = normCDF(d1).toFixed(2);
+      var gamma = (Math.exp(-d1*d1/2)/(Math.sqrt(2*Math.PI)*S*sigma*Math.sqrt(T))).toFixed(3);
+      var theta = (((-S*sigma*Math.exp(-d1*d1/2))/(2*Math.sqrt(2*Math.PI)*Math.sqrt(T))) - r*K*Math.exp(-r*T)*normCDF(d2)).toFixed(3);
+      var vega = (S*Math.sqrt(T)*Math.exp(-d1*d1/2)/Math.sqrt(2*Math.PI)).toFixed(3);
+      var rho = (K*T*Math.exp(-r*T)*normCDF(d2)).toFixed(3);
+      greekDelta.textContent = delta;
+      greekGamma.textContent = gamma;
+      greekTheta.textContent = theta;
+      greekVega.textContent = vega;
+      greekRho.textContent = rho;
+    }
+    // DOM elements
+    var sliders = ['price','strike','days','vol','rate'];
+    sliders.forEach(id => {
+      window[id] = document.getElementById(id);
+      var valSpan = document.getElementById(id+'-val');
+      window[id].addEventListener('input', () => {
+        valSpan.textContent = window[id].value;
+        updateGreeks();
+      });
+    });
+    var greekDelta = document.getElementById('greek-delta');
+    var greekGamma = document.getElementById('greek-gamma');
+    var greekTheta = document.getElementById('greek-theta');
+    var greekVega = document.getElementById('greek-vega');
+    var greekRho = document.getElementById('greek-rho');
+    // Initialize
+    updateGreeks();
+  </script>
+</body>
+</html>
