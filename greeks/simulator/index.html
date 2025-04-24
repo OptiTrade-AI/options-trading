@@ -1,323 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Greeks Simulator & Scenario Walkthrough</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --radius: 12px;
-      --spacing: 1.5rem;
-      /* surfaces */
-      --background: #F9FBFD;
-      --surface: #FFFFFF;
-      --surface-shadow: 0 4px 16px rgba(0,0,0,0.07);
-      /* palette */
-      --primary: #001F3F;
-      --primary-light: #003087;
-      --secondary: #2D3748;
-      /* text */
-      --text: #1A202C;
-      --text-muted: #4A5568;
-      /* semantic */
-      --accent: #3182CE;
-      --success: #38A169;
-      --error: #E53E3E;
-      /* layout */
-      --max-width: 950px;
-    }
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--background);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-    main { flex: 1 0 auto; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greeks Simulator & Scenario Walkthrough</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --radius: 12px;
+            --spacing: 1.5rem;
+            /* surfaces */
+            --background: #F9FBFD;
+            --surface: #FFFFFF;
+            --surface-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            /* palette */
+            --primary: #001F3F;
+            --primary-light: #003087;
+            --secondary: #2D3748;
+            /* text */
+            --text: #1A202C;
+            --text-muted: #4A5568;
+            /* semantic */
+            --accent: #3182CE;
+            --success: #38A169;
+            --error: #E53E3E;
+            /* layout */
+            --max-width: 950px;
+        }
 
-    /*—— HEADER ——*/
-    header {
-      text-align: center;
-      padding: calc(var(--spacing)*3) var(--spacing);
-      background: linear-gradient(135deg, var(--primary-light), var(--primary));
-      color: var(--surface);
-      box-shadow: var(--surface-shadow);
-      position: relative;
-      z-index: 10;
-    }
-    header h1 { font-size: clamp(2rem, 5vw, 2.5rem); font-weight: 700; margin-bottom: 0.5rem; }
-    header p { font-size: clamp(1rem, 3vw, 1.15rem); opacity: 0.9; }
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /*—— CONTAINER ——*/
-    .sim-container {
-      max-width: var(--max-width);
-      margin: calc(var(--spacing)*3) auto;
-      padding: 0 var(--spacing);
-    }
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
 
-    /*—— SCENARIO WALKTHROUGH ——*/
-    .scenario {
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--surface-shadow);
-      padding: var(--spacing);
-      margin-bottom: calc(var(--spacing)*2);
-      color: var(--secondary);
-    }
-    .scenario h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-      color: var(--primary);
-      text-align: center;
-    }
-    .scenario p {
-      margin-bottom: 0.75rem;
-    }
-    .scenario ul {
-      list-style: inside disc;
-      padding-left: 1rem;
-    }
-    .scenario ul li {
-      margin-bottom: 0.5rem;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
 
-    /*—— TYPE TOGGLE ——*/
-    .type-toggle { text-align: center; margin-bottom: calc(var(--spacing)*2); }
-    .type-toggle label { font-weight: 500; color: var(--primary); }
-    .type-toggle select { margin-left: 0.5rem; padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--secondary); }
+        main {
+            flex: 1 0 auto;
+        }
 
-    /*—— INFO ICON ——*/
-    .info-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 1.2rem;
-      height: 1.2rem;
-      fill: var(--text-muted);
-      margin-left: 0.5rem;
-      cursor: pointer;
-      transition: fill 0.2s;
-      vertical-align: middle;
-    }
-    .info-icon:hover { fill: var(--accent); }
+        /*—— HEADER ——*/
+        header {
+            text-align: center;
+            padding: calc(var(--spacing)*3) var(--spacing);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: var(--surface);
+            box-shadow: var(--surface-shadow);
+            position: relative;
+            z-index: 10;
+        }
 
-    /*—— INFO MODAL ——*/
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 50;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.4);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background: var(--surface);
-      padding: var(--spacing);
-      border-radius: var(--radius);
-      box-shadow: var(--surface-shadow);
-      max-width: 400px;
-      width: 90%;
-      position: relative;
-      color: var(--secondary);
-    }
-    .modal-content h2 {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      color: var(--primary);
-    }
-    .modal-content ul {
-      list-style: inside disc;
-      margin: 0.5rem 0 1rem 0;
-      padding-left: 1rem;
-    }
-    .modal-content ul li {
-      margin-bottom: 0.25rem;
-    }
-    .modal-close {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.75rem;
-      font-size: 1.5rem;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-    .modal-close:hover { color: var(--text); }
+        header h1 {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
 
-    /*—— GREEKS OUTPUT ——*/
-    .greeks-output { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing); margin-bottom: calc(var(--spacing)*2); }
-    .greek-box { background: var(--surface); border-radius: var(--radius); padding: var(--spacing); text-align: center; box-shadow: var(--surface-shadow); }
-    .greek-box h3 { font-size: 1.15rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 600; }
-    .greek-box p { font-size: 1.05rem; color: var(--text); font-weight: 500; }
+        header p {
+            font-size: clamp(1rem, 3vw, 1.15rem);
+            opacity: 0.9;
+        }
 
-    /*—— SLIDERS ——*/
-    .slider-group { background: var(--surface); border-radius: var(--radius); padding: var(--spacing); margin-bottom: calc(var(--spacing)*0.75); box-shadow: var(--surface-shadow); }
-    .slider-group label { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; font-weight: 500; color: var(--primary); margin-bottom: 0.75rem; }
-    .slider-group .value-display { font-weight: 600; color: var(--surface); background: var(--primary); padding: 0.2rem 0.6rem; border-radius: 4px; }
-    .slider-group input[type=range] { width: 100%; height: 7px; background: transparent; outline: none; -webkit-appearance: none; cursor: pointer; margin: 10px 0; }
-    .slider-group input[type=range]::-webkit-slider-runnable-track { height: 7px; background: linear-gradient(to right, var(--primary) var(--slider-percentage), #E2E8F0 var(--slider-percentage)); border-radius: 3px; }
-    .slider-group input[type=range]::-moz-range-track { height: 7px; background: #E2E8F0; border-radius: 3px; }
-    .slider-group input[type=range]::-moz-range-progress { height: 7px; background: var(--primary); border-radius: 3px; }
-    .slider-group input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--primary); border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 2px 5px rgba(0,0,0,0.15); margin-top: -5px; transition: transform 0.2s ease, background 0.2s ease; }
-    .slider-group input[type=range]::-webkit-slider-thumb:hover { background: var(--primary-light); transform: scale(1.1); }
-    .slider-group input[type=range]::-moz-range-thumb { width: 16px; height: 16px; background: var(--primary); border-radius: 50%; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: transform 0.2s ease, background 0.2s ease; }
-    .slider-group input[type=range]::-moz-range-thumb:hover { background: var(--primary-light); transform: scale(1.1); }
+        /*—— CONTAINER ——*/
+        .sim-container {
+            max-width: var(--max-width);
+            margin: calc(var(--spacing)*3) auto;
+            padding: 0 var(--spacing);
+        }
 
-    /*—— FOOTER ——*/
-    footer { text-align: center; padding: calc(var(--spacing)*1.5); background: var(--primary); color: var(--surface); font-size: 0.85rem; }
-  </style>
+        /*—— SCENARIO WALKTHROUGH ——*/
+        .scenario {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--surface-shadow);
+            padding: var(--spacing);
+            margin-bottom: calc(var(--spacing)*2);
+            color: var(--secondary);
+        }
+
+        .scenario h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .scenario p {
+            margin-bottom: 0.75rem;
+        }
+
+        .scenario ul {
+            list-style: inside disc;
+            padding-left: 1rem;
+        }
+
+        .scenario ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        /*—— TYPE TOGGLE ——*/
+        .type-toggle {
+            text-align: right;
+            margin-bottom: calc(var(--spacing)*2);
+        }
+
+        .type-toggle label {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .type-toggle select {
+            margin-left: 0.5rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--secondary);
+        }
+
+        /*—— INFO ICON ——*/
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.2rem;
+            height: 1.2rem;
+            fill: var(--text-muted);
+            margin-left: 0.5rem;
+            cursor: pointer;
+            transition: fill 0.2s;
+            vertical-align: middle;
+        }
+
+        .info-icon:hover {
+            fill: var(--accent);
+        }
+
+        /*—— INFO MODAL ——*/
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: var(--spacing);
+            border-radius: var(--radius);
+            box-shadow: var(--surface-shadow);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            color: var(--secondary);
+        }
+
+        .modal-content h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .modal-content ul {
+            list-style: inside disc;
+            margin: 0.5rem 0 1rem 0;
+            padding-left: 1rem;
+        }
+
+        .modal-content ul li {
+            margin-bottom: 0.25rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        /*—— SECTION TITLE ——*/
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 1.75rem);
+            color: var(--primary);
+            text-align: center;
+            margin: calc(var(--spacing)*2) 0 calc(var(--spacing)*1.5);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--primary-light);
+            border-radius: 2px;
+        }
+
+        /*—— GREEKS OUTPUT ——*/
+        .greeks-output {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing);
+            margin-bottom: calc(var(--spacing)*2);
+        }
+
+        .greek-box {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing);
+            text-align: center;
+            box-shadow: var(--surface-shadow);
+        }
+
+        .greek-box h3 {
+            font-size: 1.15rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .greek-box p {
+            font-size: 1.05rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /*—— SLIDERS ——*/
+        /*—— SLIDER GROUP ——*/
+        .slider-group {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: var(--spacing);
+            margin-bottom: calc(var(--spacing)*0.75);
+            box-shadow: var(--surface-shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .slider-group:hover {
+            transform: translateY(-3px);
+        }
+
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .slider-group .value-display {
+            font-weight: 600;
+            color: var(--text);
+            background: var(--background);
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+        }
+
+        .slider-group input[type=range] {
+            width: 100%;
+            height: 7px;
+            background: transparent;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .slider-group input[type=range]::-webkit-slider-runnable-track {
+            height: 7px;
+            background: linear-gradient(to right, var(--primary) var(--slider-percentage), #E2E8F0 var(--slider-percentage));
+            border-radius: 3px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-group input[type=range]::-moz-range-track {
+            height: 7px;
+            background: #E2E8F0;
+            border-radius: 3px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-group input[type=range]::-moz-range-progress {
+            height: 7px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .slider-group input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 2px solid var(--surface);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            margin-top: -5px;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .slider-group input[type=range]::-webkit-slider-thumb:hover {
+            background: var(--primary-light);
+            transform: scale(1.1);
+        }
+
+        .slider-group input[type=range]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .slider-group input[type=range]::-moz-range-thumb:hover {
+            background: var(--primary-light);
+            transform: scale(1.1);
+        }
+
+        /*—— FOOTER ——*/
+        footer {
+            text-align: center;
+            padding: calc(var(--spacing)*1.5);
+            background: var(--primary);
+            color: var(--surface);
+            font-size: 0.85rem;
+        }
+    </style>
 </head>
+
 <body>
-  <header>
-    <h1>Interactive Greeks Simulator</h1>
-    <p>Adjust parameters to see real-time option Greeks calculations</p>
-  </header>
+    <header>
+        <h1>Interactive Greeks Simulator</h1>
+        <p>Adjust parameters to see real-time option Greeks calculations</p>
+    </header>
 
-  <main>
-    <div class="sim-container">
+    <main>
+        <div class="sim-container">
 
-      <!-- Scenario Text -->
-      <div class="scenario">
-        <h2>Scenario Walkthrough</h2>
-        <p>Adjust the sliders to simulate an option contract. See how each Greek responds to changes in underlying price, strike price, time to expiration, volatility, and interest rate. This tool helps you understand:</p>
-        <ul>
-          <li>How <strong>Delta</strong> shifts with moneyness (ITM vs OTM).</li>
-          <li>Why <strong>Gamma</strong> peaks near expiration or at-the-money.</li>
-          <li>The effect of time decay on <strong>Theta</strong> as expiration nears.</li>
-          <li><strong>Vega</strong>'s sensitivity to volatility changes before events.</li>
-          <li>How interest rates impact <strong>Rho</strong> over longer expirations.</li>
-        </ul>
-      </div>
+            <!-- Scenario Text -->
+            <div class="scenario">
+                <h2>Scenario Walkthrough</h2>
+                <p>Adjust the sliders to simulate an option contract. See how each Greek responds to changes in
+                    underlying price, strike price, time to expiration, volatility, and interest rate. This tool helps
+                    you understand:</p>
+                <ul>
+                    <li>How <strong>Delta</strong> shifts with moneyness (ITM vs OTM).</li>
+                    <li>Why <strong>Gamma</strong> peaks near expiration or at-the-money.</li>
+                    <li>The effect of time decay on <strong>Theta</strong> as expiration nears.</li>
+                    <li><strong>Vega</strong>'s sensitivity to volatility changes before events.</li>
+                    <li>How interest rates impact <strong>Rho</strong> over longer expirations.</li>
+                </ul>
+            </div>
 
-      <div class="type-toggle">
-        <label for="optionType">
-          Option Type:
-          <select id="optionType">
-            <option value="call">Call</option>
-            <option value="put">Put</option>
-          </select>
-          <svg id="info-icon" class="info-icon"
-               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-label="More info">
-            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2" fill="none"/>
-            <rect x="9.25" y="9" width="1.5" height="5" fill="currentColor"/>
-            <circle cx="10" cy="6" r="1" fill="currentColor"/>
-          </svg>
-        </label>
-      </div>
+            <div class="type-toggle">
+                <label for="optionType">
+                    Option Type:
+                    <select id="optionType">
+                        <option value="call">Call</option>
+                        <option value="put">Put</option>
+                    </select>
+                    <svg id="info-icon" class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        aria-label="More info">
+                        <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2" fill="none" />
+                        <rect x="9.25" y="9" width="1.5" height="5" fill="currentColor" />
+                        <circle cx="10" cy="6" r="1" fill="currentColor" />
+                    </svg>
+                </label>
+            </div>
 
-      <!-- INFO MODAL -->
-      <div id="info-modal" class="modal">
-        <div class="modal-content">
-          <span id="modal-close" class="modal-close">&times;</span>
-          <h2>About This Simulator</h2>
-          <p>Powered by the Black-Scholes model, this tool shows real-time European option Greeks:</p>
-          <ul>
-            <li>Δ (Delta): Price sensitivity to underlying moves</li>
-            <li>Γ (Gamma): Speed of Delta’s change</li>
-            <li>Θ (Theta): Daily time decay</li>
-            <li>ν (Vega): Volatility impact</li>
-            <li>ρ (Rho): Interest rate effect</li>
-          </ul>
-          <p>Switch between Call and Put to compare profiles instantly.</p>
+            <!-- INFO MODAL -->
+            <div id="info-modal" class="modal">
+                <div class="modal-content">
+                    <span id="modal-close" class="modal-close">&times;</span>
+                    <h2>About This Simulator</h2>
+                    <p>Powered by the Black-Scholes model, this tool shows real-time European option Greeks:</p>
+                    <ul>
+                        <li>Δ (Delta): Price sensitivity to underlying moves</li>
+                        <li>Γ (Gamma): Speed of Delta’s change</li>
+                        <li>Θ (Theta): Daily time decay</li>
+                        <li>ν (Vega): Volatility impact</li>
+                        <li>ρ (Rho): Interest rate effect</li>
+                    </ul>
+                    <p>Switch between Call and Put to compare profiles instantly.</p>
+                </div>
+            </div>
+
+            <div class="section-title">Option Greeks</div>
+            <div class="greeks-output">
+                <div class="greek-box">
+                    <h3>Delta</h3>
+                    <p id="greek-delta">0.50</p>
+                </div>
+                <div class="greek-box">
+                    <h3>Gamma</h3>
+                    <p id="greek-gamma">0.02</p>
+                </div>
+                <div class="greek-box">
+                    <h3>Theta</h3>
+                    <p id="greek-theta">-0.03</p>
+                </div>
+                <div class="greek-box">
+                    <h3>Vega</h3>
+                    <p id="greek-vega">0.15</p>
+                </div>
+                <div class="greek-box">
+                    <h3>Rho</h3>
+                    <p id="greek-rho">0.05</p>
+                </div>
+            </div>
+
+            <div class="section-title">Option Parameters</div>
+            <div class="slider-group">
+                <label>Underlying Price ($): <span id="price-val" class="value-display">100</span></label>
+                <input type="range" id="price" min="50" max="150" step="1" value="100">
+            </div>
+            <div class="slider-group">
+                <label>Strike Price ($): <span id="strike-val" class="value-display">100</span></label>
+                <input type="range" id="strike" min="50" max="150" step="1" value="100">
+            </div>
+            <div class="slider-group">
+                <label>Days to Expiration: <span id="days-val" class="value-display">30</span></label>
+                <input type="range" id="days" min="1" max="365" step="1" value="30">
+            </div>
+            <div class="slider-group">
+                <label>Implied Volatility (%): <span id="vol-val" class="value-display">20</span></label>
+                <input type="range" id="vol" min="5" max="100" step="1" value="20">
+            </div>
+            <div class="slider-group">
+                <label>Risk-Free Rate (%): <span id="rate-val" class="value-display">2</span></label>
+                <input type="range" id="rate" min="0" max="10" step="0.1" value="2">
+            </div>
         </div>
-      </div>
+    </main>
 
-      <div class="greeks-output">
-        <div class="greek-box"><h3>Delta</h3><p id="greek-delta">0.00</p></div>
-        <div class="greek-box"><h3>Gamma</h3><p id="greek-gamma">0.000</p></div>
-        <div class="greek-box"><h3>Theta</h3><p id="greek-theta">0.000</p></div>
-        <div class="greek-box"><h3>Vega</h3><p id="greek-vega">0.000</p></div>
-        <div class="greek-box"><h3>Rho</h3><p id="greek-rho">0.000</p></div>
-      </div>
+    <footer>© 2025 OptiTrade AI</footer>
 
-      <div class="slider-group"><label>Price: <span id="price-val" class="value-display"></span></label><input type="range" id="price" min="1" max="200" value="100"></div>
-      <div class="slider-group"><label>Strike: <span id="strike-val" class="value-display"></span></label><input type="range" id="strike" min="1" max="200" value="100"></div>
-      <div class="slider-group"><label>Days to Exp: <span id="days-val" class="value-display"></span></label><input type="range" id="days" min="1" max="365" value="30"></div>
-      <div class="slider-group"><label>Vol %: <span id="vol-val" class="value-display"></span></label><input type="range" id="vol" min="1" max="200" value="20"></div>
-      <div class="slider-group"><label>Rate %: <span id="rate-val" class="value-display"></span></label><input type="range" id="rate" min="0" max="10" step="0.1" value="1"></div>
+    <script>
+        function erf(x) {
+            const sign = x < 0 ? -1 : 1;
+            x = Math.abs(x);
+            const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+            const t = 1 / (1 + p * x);
+            const y = 1 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+            return sign * y;
+        }
+        function normCDF(x) { return (1 + erf(x / Math.sqrt(2))) / 2; }
+        function phi(x) { return Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI); }
 
-    </div>
-  </main>
+        const params = ['price', 'strike', 'days', 'vol', 'rate'];
+        params.forEach(id => {
+            const range = document.getElementById(id),
+                display = document.getElementById(id + '-val');
+            const update = () => {
+                display.textContent = range.value;
+                const pct = ((range.value - range.min) / (range.max - range.min)) * 100 + '%';
+                range.style.setProperty('--slider-percentage', pct);
+                updateGreeks();
+            };
+            range.addEventListener('input', update);
+            update();
+        });
 
-  <footer>© 2025 OptiTrade AI</footer>
+        document.getElementById('optionType').addEventListener('change', updateGreeks);
+        document.getElementById('info-icon').onclick = () => {
+            document.getElementById('info-modal').style.display = 'flex';
+        };
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('info-modal').style.display = 'none';
+        });
+        window.addEventListener('click', e => {
+            if (e.target.id === 'info-modal') {
+                document.getElementById('info-modal').style.display = 'none';
+            }
+        });
 
-  <script>
-    function erf(x) {
-      const sign = x < 0 ? -1 : 1;
-      x = Math.abs(x);
-      const a1=0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429, p=0.3275911;
-      const t = 1/(1 + p*x);
-      const y = 1 - ((((a5*t + a4)*t + a3)*t + a2)*t + a1)*t*Math.exp(-x*x);
-      return sign * y;
-    }
-    function normCDF(x) { return (1 + erf(x/Math.sqrt(2))) / 2; }
-    function phi(x) { return Math.exp(-x*x/2) / Math.sqrt(2*Math.PI); }
+        function updateGreeks() {
+            const S = +document.getElementById('price').value,
+                K = +document.getElementById('strike').value,
+                T = +document.getElementById('days').value / 365,
+                r = +document.getElementById('rate').value / 100,
+                sig = +document.getElementById('vol').value / 100;
 
-    const params = ['price','strike','days','vol','rate'];
-    params.forEach(id => {
-      const range = document.getElementById(id),
-            display = document.getElementById(id + '-val');
-      const update = () => {
-        display.textContent = range.value;
-        const pct = ((range.value - range.min) / (range.max - range.min)) * 100 + '%';
-        range.style.setProperty('--slider-percentage', pct);
-        updateGreeks();
-      };
-      range.addEventListener('input', update);
-      update();
-    });
+            const d1 = (Math.log(S / K) + (r + 0.5 * sig * sig) * T) / (sig * Math.sqrt(T)),
+                d2 = d1 - sig * Math.sqrt(T),
+                Nd1 = normCDF(d1),
+                Nd2 = normCDF(d2),
+                gamma = phi(d1) / (S * sig * Math.sqrt(T)),
+                thetaC = -S * sig * phi(d1) / (2 * Math.sqrt(T)) - r * K * Math.exp(-r * T) * Nd2,
+                rhoC = K * T * Math.exp(-r * T) * Nd2;
 
-    document.getElementById('optionType').addEventListener('change', updateGreeks);
-    document.getElementById('info-icon').onclick = () => {
-      document.getElementById('info-modal').style.display = 'flex';
-    };
-    document.getElementById('modal-close').addEventListener('click', () => {
-      document.getElementById('info-modal').style.display = 'none';
-    });
-    window.addEventListener('click', e => {
-      if (e.target.id === 'info-modal') {
-        document.getElementById('info-modal').style.display = 'none';
-      }
-    });
+            let delta, theta, rho;
+            if (document.getElementById('optionType').value === 'put') {
+                delta = Nd1 - 1;
+                theta = -S * sig * phi(d1) / (2 * Math.sqrt(T)) + r * K * Math.exp(-r * T) * (1 - Nd2);
+                rho = -K * T * Math.exp(-r * T) * (1 - Nd2);
+            } else {
+                delta = Nd1;
+                theta = thetaC;
+                rho = rhoC;
+            }
 
-    function updateGreeks() {
-      const S = +document.getElementById('price').value,
-            K = +document.getElementById('strike').value,
-            T = +document.getElementById('days').value / 365,
-            r = +document.getElementById('rate').value / 100,
-            sig = +document.getElementById('vol').value / 100;
-
-      const d1 = (Math.log(S/K) + (r + 0.5*sig*sig)*T) / (sig*Math.sqrt(T)),
-            d2 = d1 - sig*Math.sqrt(T),
-            Nd1 = normCDF(d1),
-            Nd2 = normCDF(d2),
-            gamma = phi(d1)/(S*sig*Math.sqrt(T)),
-            thetaC = -S*sig*phi(d1)/(2*Math.sqrt(T)) - r*K*Math.exp(-r*T)*Nd2,
-            rhoC = K*T*Math.exp(-r*T)*Nd2;
-
-      let delta, theta, rho;
-      if (document.getElementById('optionType').value === 'put') {
-        delta = Nd1 - 1;
-        theta = -S*sig*phi(d1)/(2*Math.sqrt(T)) + r*K*Math.exp(-r*T)*(1-Nd2);
-        rho   = -K*T*Math.exp(-r*T)*(1-Nd2);
-      } else {
-        delta = Nd1;
-        theta = thetaC;
-        rho   = rhoC;
-      }
-
-      document.getElementById('greek-delta').textContent = delta.toFixed(2);
-      document.getElementById('greek-gamma').textContent = gamma.toFixed(3);
-      document.getElementById('greek-theta').textContent = theta.toFixed(3);
-      document.getElementById('greek-vega').textContent   = (S*Math.sqrt(T)*phi(d1)/100).toFixed(3);
-      document.getElementById('greek-rho').textContent   = (rho/100).toFixed(3);
-    }
-  </script>
+            document.getElementById('greek-delta').textContent = delta.toFixed(2);
+            document.getElementById('greek-gamma').textContent = gamma.toFixed(3);
+            document.getElementById('greek-theta').textContent = theta.toFixed(3);
+            document.getElementById('greek-vega').textContent = (S * Math.sqrt(T) * phi(d1) / 100).toFixed(3);
+            document.getElementById('greek-rho').textContent = (rho / 100).toFixed(3);
+        }
+    </script>
 </body>
+
 </html>
