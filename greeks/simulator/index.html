@@ -10,12 +10,12 @@
       --radius: 12px;
       --spacing: 1.5rem;
       /* surfaces */
-      --background: #F8FAFC;
+      --background: #F9FBFD;
       --surface: #FFFFFF;
-      --surface-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --surface-shadow: 0 4px 16px rgba(0,0,0,0.07);
       /* palette */
       --primary: #001F3F;       /* navy */
-      --primary-light: #004080;
+      --primary-light: #003087;
       --secondary: #2D3748;     /* dark gray */
       /* text */
       --text: #1A202C;
@@ -25,7 +25,7 @@
       --success: #38A169;
       --error: #E53E3E;
       /* layout */
-      --max-width: 1000px;
+      --max-width: 950px;
     }
 
     *, *::before, *::after {
@@ -85,7 +85,7 @@
       font-size: clamp(1.5rem, 4vw, 1.75rem);
       color: var(--primary);
       text-align: center;
-      margin-bottom: calc(var(--spacing)*1.5);
+      margin: calc(var(--spacing)*2) 0 calc(var(--spacing)*1.5);
       position: relative;
     }
     .section-title::after {
@@ -105,12 +105,12 @@
       background: var(--surface);
       border-radius: var(--radius);
       padding: var(--spacing);
-      margin-bottom: var(--spacing);
+      margin-bottom: calc(var(--spacing)*0.75);
       box-shadow: var(--surface-shadow);
       transition: transform 0.2s ease;
     }
     .slider-group:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
     }
     .slider-group label {
       display: flex;
@@ -125,12 +125,12 @@
       font-weight: 600;
       color: var(--text);
       background: var(--background);
-      padding: 0.25rem 0.75rem;
+      padding: 0.3rem 0.8rem;
       border-radius: 6px;
     }
     .slider-group input[type=range] {
       width: 100%;
-      height: 8px;
+      height: 7px;
       background: transparent;
       outline: none;
       -webkit-appearance: none;
@@ -138,37 +138,36 @@
       margin: 10px 0;
     }
     .slider-group input[type=range]::-webkit-slider-runnable-track {
-      height: 8px;
+      height: 7px;
       background: linear-gradient(to right, var(--primary) var(--slider-percentage), #E2E8F0 var(--slider-percentage));
-      border-radius: 4px;
+      border-radius: 3px;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     }
     .slider-group input[type=range]::-moz-range-track {
-      height: 8px;
+      height: 7px;
       background: #E2E8F0;
-      border-radius: 4px;
+      border-radius: 3px;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     }
     .slider-group input[type=range]::-moz-range-progress {
-      height: 8px;
+      height: 7px;
       background: var(--primary);
-      border-radius: 4px;
+      border-radius: 3px;
     }
     .slider-group input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       background: var(--primary);
       border-radius: 50%;
       border: 2px solid var(--surface);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      margin-top: -6px;
-      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      margin-top: -5px;
+      transition: transform 0.2s ease, background 0.2s ease;
     }
     .slider-group input[type=range]::-webkit-slider-thumb:hover {
       background: var(--primary-light);
-      transform: scale(1.15);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      transform: scale(1.1);
     }
     .slider-group input[type=range]::-moz-range-thumb {
       width: 16px;
@@ -176,21 +175,20 @@
       background: var(--primary);
       border-radius: 50%;
       border: none;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      transition: transform 0.2s ease, background 0.2s ease;
     }
     .slider-group input[type=range]::-moz-range-thumb:hover {
       background: var(--primary-light);
-      transform: scale(1.15);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      transform: scale(1.1);
     }
 
     /*—— GREEKS OUTPUT ——*/
     .greeks-output {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: var(--spacing);
-      margin-top: calc(var(--spacing)*2);
+      margin: 0 0 calc(var(--spacing)*2);
     }
     .greek-box {
       background: var(--surface);
@@ -198,20 +196,19 @@
       padding: var(--spacing);
       text-align: center;
       box-shadow: var(--surface-shadow);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease;
     }
     .greek-box:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      transform: translateY(-3px);
     }
     .greek-box h3 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--primary);
       margin-bottom: 0.5rem;
       font-weight: 600;
     }
     .greek-box p {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--text);
       font-weight: 500;
     }
@@ -257,13 +254,20 @@
     /*—— RESPONSIVE ——*/
     @media (max-width: 768px) {
       .greeks-output {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: calc(var(--spacing)*0.75);
       }
       .sim-container {
         padding: 0 calc(var(--spacing)*0.75);
       }
       .slider-group label {
         font-size: 0.9rem;
+      }
+      .greek-box h3 {
+        font-size: 1.05rem;
+      }
+      .greek-box p {
+        font-size: 0.95rem;
       }
     }
     @media (max-width: 480px) {
@@ -276,13 +280,13 @@
       .section-title {
         font-size: clamp(1.25rem, 5vw, 1.5rem);
       }
-      .greek-box h3 {
-        font-size: 1rem;
-      }
-      .greek-box p {
-        font-size: 1rem;
-      }
       .slider-group .value-display {
+        font-size: 0.85rem;
+      }
+      .scenario h2 {
+        font-size: 1.25rem;
+      }
+      .scenario p, .scenario ul {
         font-size: 0.85rem;
       }
     }
@@ -296,8 +300,17 @@
 
   <main>
     <div class="sim-container">
-      <div class="section-title">Option Parameters</div>
+      <!-- Greeks Output -->
+      <div class="section-title">Option Greeks</div>
+      <div class="greeks-output">
+        <div class="greek-box"><h3>Delta</h3><p id="greek-delta">0.50</p></div>
+        <div class="greek-box"><h3>Gamma</h3><p id="greek-gamma">0.02</p></div>
+        <div class="greek-box"><h3>Theta</h3><p id="greek-theta">-0.03</p></div>
+        <div class="greek-box"><h3>Vega</h3><p id="greek-vega">0.15</p></div>
+        <div class="greek-box"><h3>Rho</h3><p id="greek-rho">0.05</p></div>
+      </div>
       <!-- Sliders -->
+      <div class="section-title">Option Parameters</div>
       <div class="slider-group">
         <label>Underlying Price ($): <span id="price-val" class="value-display">100</span></label>
         <input type="range" id="price" min="50" max="150" step="1" value="100">
@@ -317,15 +330,6 @@
       <div class="slider-group">
         <label>Risk-Free Rate (%): <span id="rate-val" class="value-display">2</span></label>
         <input type="range" id="rate" min="0" max="10" step="0.1" value="2">
-      </div>
-      <!-- Greeks Output -->
-      <div class="section-title">Option Greeks</div>
-      <div class="greeks-output">
-        <div class="greek-box"><h3>Delta</h3><p id="greek-delta">0.50</p></div>
-        <div class="greek-box"><h3>Gamma</h3><p id="greek-gamma">0.02</p></div>
-        <div class="greek-box"><h3>Theta</h3><p id="greek-theta">-0.03</p></div>
-        <div class="greek-box"><h3>Vega</h3><p id="greek-vega">0.15</p></div>
-        <div class="greek-box"><h3>Rho</h3><p id="greek-rho">0.05</p></div>
       </div>
       <!-- Scenario Text -->
       <div class="scenario">
