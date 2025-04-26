@@ -12,21 +12,19 @@
     :root {
       --radius: 12px;
       --spacing: 1.5rem;
-      /* surfaces */
-      --background: #F8FAFC; /* Unified background color */
+      --background: #F8FAFC;
       --surface: #F8FAFC;
-      /* palette */
       --primary: #001F3F;
       --primary-light: #003566;
       --secondary: #333333;
-      /* text */
       --text: #222222;
       --text-muted: #666666;
-      /* semantic */
       --info-bg: #EAF2FF;
       --info-border: #00509E;
       --max-width: 1200px;
       --shadow: 0 6px 24px rgba(0,0,0,0.1);
+      --modal-bg: rgba(0,0,0,0.5);
+      --modal-surface: #FFFFFF;
     }
 
     *, *::before, *::after {
@@ -52,12 +50,10 @@
       min-height: 100vh;
     }
 
-    /* Main content wrapper */
     main {
       flex: 1 0 auto;
     }
 
-    /*—— HEADER ——*/
     header {
       text-align: center;
       padding: calc(var(--spacing) * 4) var(--spacing);
@@ -87,14 +83,12 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /*—— CONTAINER ——*/
     .container {
       max-width: var(--max-width);
       margin: calc(var(--spacing) * 3) auto;
       padding: 0 var(--spacing);
     }
 
-    /*—— SECTION TITLES ——*/
     .section-title {
       font-size: clamp(1.8rem, 5vw, 2.4rem);
       color: var(--primary);
@@ -115,7 +109,6 @@
       border-radius: 3px;
     }
 
-    /*—— GRID LAYOUT ——*/
     .grid {
       display: grid;
       gap: calc(var(--spacing) * 1.5);
@@ -125,7 +118,6 @@
       margin-top: calc(var(--spacing) * 2);
     }
 
-    /*—— CARDS ——*/
     .card, .risk-card {
       background: var(--surface);
       border-radius: var(--radius);
@@ -134,6 +126,7 @@
       position: relative;
       overflow: hidden;
       border: 1px solid rgba(0,0,0,0.05);
+      cursor: pointer;
     }
     .card:hover, .risk-card:hover {
       transform: translateY(-10px);
@@ -162,7 +155,6 @@
       padding-left: 2rem;
     }
 
-    /*—— STRATEGY IMAGE SECTION ——*/
     .strategy-section {
       background: var(--background);
       border-radius: var(--radius);
@@ -187,12 +179,10 @@
       transform: scale(1.02);
     }
 
-    /* Ensure the image scales without background issues */
     .strategy-image[src] {
       background: var(--background) !important;
     }
 
-    /*—— FOOTER ——*/
     footer {
       text-align: center;
       padding: calc(var(--spacing) * 2);
@@ -203,7 +193,81 @@
       box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
     }
 
-    /*—— RESPONSIVE ——*/
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--modal-bg);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing);
+    }
+    .modal-content {
+      background: var(--modal-surface);
+      border-radius: var(--radius);
+      max-width: 600px;
+      width: 100%;
+      padding: calc(var(--spacing) * 2);
+      box-shadow: var(--shadow);
+      position: relative;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-content h2 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .modal-content p {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .modal-content ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 1rem;
+    }
+    .modal-content ul li {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.7;
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .modal-content ul li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .modal-close:hover {
+      color: var(--primary);
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 768px) {
       .steps-grid, .risk-grid {
         grid-template-columns: 1fr;
@@ -223,6 +287,9 @@
       .strategy-section {
         padding: var(--spacing);
       }
+      .modal-content {
+        max-width: 90%;
+      }
     }
     @media (max-width: 480px) {
       header h1 {
@@ -240,9 +307,14 @@
       .strategy-section {
         padding: calc(var(--spacing) * 0.5);
       }
+      .modal-content {
+        padding: var(--spacing);
+      }
+      .modal-content h2 {
+        font-size: 1.6rem;
+      }
     }
 
-    /*—— ACCESSIBILITY ——*/
     .sr-only {
       position: absolute;
       width: 1px;
@@ -271,15 +343,15 @@
       <section id="core-steps">
         <div class="section-title">Core Steps</div>
         <div class="grid steps-grid">
-          <div class="card">
+          <div class="card" onclick="openModal('modal1')">
             <h2>1. Sell Cash-Secured Put</h2>
             <p>Select a strike below market price. Sell 1 put contract per 100 shares and collect premium while reserving cash.</p>
           </div>
-          <div class="card">
+          <div class="card" onclick="openModal('modal2')">
             <h2>2. Assignment</h2>
             <p>If exercised, you purchase 100 shares at strike price—keeping the full premium you received.</p>
           </div>
-          <div class="card">
+          <div class="card" onclick="openModal('modal3')">
             <h2>3. Sell Covered Call</h2>
             <p>Choose a strike above your cost basis. Sell 1 call contract per 100 shares to earn another premium.</p>
           </div>
@@ -304,8 +376,80 @@
         </div>
       </section>
     </div>
+
+    <!-- Modals -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('modal1')">&times;</button>
+        <h2>Sell Cash-Secured Put</h2>
+        <p>This step involves selling a put option while having enough cash to buy the underlying shares if assigned.</p>
+        <ul>
+          <li><strong>Strike Selection:</strong> Choose a strike price below the current market price where you're comfortable owning the stock.</li>
+          <li><strong>Premium Collection:</strong> Receive an upfront premium for selling the put, which is yours to keep regardless of the outcome.</li>
+          <li><strong>Cash Reserve:</strong> Ensure you have cash equivalent to 100 shares × strike price to cover potential assignment.</li>
+          <li><strong>Expiration:</strong> Select an expiration date (typically 30-45 days) to balance premium and risk.</li>
+        </ul>
+      </div>
+    </div>
+    <div id="modal2" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('modal2')">&times;</button>
+        <h2>Assignment</h2>
+        <p>If the stock price falls below the put's strike price at expiration, you may be assigned the shares.</p>
+        <ul>
+          <li><strong>Purchase Shares:</strong> Buy 100 shares per contract at the strike price, using the reserved cash.</li>
+          <li><strong>Keep Premium:</strong> The premium from selling the put reduces your effective cost basis.</li>
+          <li><strong>Stock Ownership:</strong> You now own the shares, which can be used for the next step of the Wheel.</li>
+          <li><strong>Management:</strong> Monitor the stock and prepare to sell covered calls or hold if the price recovers.</li>
+        </ul>
+      </div>
+    </div>
+    <div id="modal3" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('modal3')">&times;</button>
+        <h2>Sell Covered Call</h2>
+        <p>With shares assigned, sell a call option to generate additional income while holding the stock.</p>
+        <ul>
+          <li><strong>Strike Selection:</strong> Pick a strike price above your cost basis to ensure a profit if called away.</li>
+          <li><strong>Premium Collection:</strong> Collect another premium, further reducing your effective cost basis.</li>
+          <li><strong>Risk Management:</strong> Be prepared to sell shares at the strike price if the stock rises above it.</li>
+          <li><strong>Cycle Continuation:</strong> If the call expires worthless, repeat the process or adjust based on market conditions.</li>
+        </ul>
+      </div>
+    </div>
   </main>
 
   <footer>© 2025 OptiTrade AI • Educational content—do your own research.</footer>
+
+  <script>
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal(modal.id);
+        }
+      });
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal').forEach(modal => {
+          modal.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        });
+      }
+    });
+  </script>
 </body>
 </html>
