@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    Option Spreads for Small Accounts – curated & fact-checked 2025-04-27
+    Author: Justin “JJ” Johnson | OptiTrade AI
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn how to use defined-risk option spreads to grow a small trading account with disciplined risk management.">
+  <title>Option Spreads for Small Accounts – OptiTrade AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+        :root {
+            --radius: 12px;
+            --spacing: 1.5rem;
+            /* surfaces */
+            --background: #F9FBFD;
+            --surface: #FFFFFF;
+            --surface-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            /* palette */
+            --primary: #001F3F;
+            --primary-light: #003087;
+            --secondary: #2D3748;
+            /* text */
+            --text: #1A202C;
+            --text-muted: #4A5568;
+            /* semantic */
+            --accent: #3182CE;
+            --success: #38A169;
+            --error: #E53E3E;
+            /* layout */
+            --max-width: 950px;
+            /* additional */
+            --border: #E2E8F0;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        /*—— HEADER ——*/
+        header {
+            text-align: center;
+            padding: calc(var(--spacing)*3) var(--spacing);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: var(--surface);
+            box-shadow: var(--surface-shadow);
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: clamp(1rem, 3vw, 1.15rem);
+            opacity: 0.9;
+        }
+
+        /*—— NAVIGATION ——*/
+        nav {
+            margin-top: var(--spacing);
+        }
+        nav a {
+            color: var(--surface);
+            margin: 0 1rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /*—— CONTAINER ——*/
+        .sim-container {
+            max-width: var(--max-width);
+            margin: calc(var(--spacing)*3) auto;
+            padding: 0 var(--spacing);
+        }
+
+        /*—— SECTION TITLE ——*/
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 1.75rem);
+            color: var(--primary);
+            text-align: center;
+            margin: calc(var(--spacing)*2) 0 calc(var(--spacing)*1.5);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--primary-light);
+            border-radius: 2px;
+        }
+
+        /*—— DETAILS/ACCORDION ——*/
+        details {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--surface-shadow);
+            margin-bottom: calc(var(--spacing)*2);
+            padding: var(--spacing);
+        }
+        details summary {
+            cursor: pointer;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            list-style: none;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::before { content: '▶'; display: inline-block; width: 1em; color: var(--accent); }
+        details[open] summary::before { content: '▼'; }
+
+        .spread-content {
+            margin-top: var(--spacing);
+        }
+        .spread-content .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing);
+        }
+        @media (max-width: 700px) {
+            .spread-content .grid { grid-template-columns: 1fr; }
+        }
+
+        /*—— BOX ——*/
+        .box {
+            padding: var(--spacing);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+        }
+        .box h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+        .box p,
+        .box ul,
+        .box dl {
+            margin-bottom: var(--spacing);
+        }
+        .box ul {
+            list-style: inside disc;
+            color: var(--text);
+            padding-left: 1rem;
+        }
+        .box dl dt {
+            font-weight: 600;
+            margin-top: var(--spacing);
+        }
+        .box dl dd {
+            margin: 0 0 var(--spacing) var(--spacing);
+        }
+
+        .example {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            border-left: 4px solid var(--accent);
+            padding-left: var(--spacing);
+        }
+
+        /*—— FOOTER ——*/
+        footer {
+            text-align: center;
+            padding: calc(var(--spacing)*1.5);
+            background: var(--primary);
+            color: var(--surface);
+            font-size: 0.85rem;
+        }
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Option Spreads for Small Accounts</h1>
+    <p>Defined-risk strategies to protect and grow your capital.</p>
+    <nav>
+      <a href="#intro">Intro</a>
+      <a href="#put-spread">Put Spread</a>
+      <a href="#call-spread">Call Spread</a>
+      <a href="#risk-size">Risk Mgmt</a>
+      <a href="#demo">Demo</a>
+      <a href="#takeaways">Takeaways</a>
+      <a href="#disclaimer">Disclaimer</a>
+    </nav>
+  </header>
+  <main class="sim-container">
+    <section id="intro">
+      <h2 class="section-title">Introduction</h2>
+      <div class="box">
+        <p>Small accounts need big protection. Defined-risk spreads give you fixed upside and fixed downside—no surprises.</p>
+        <ul>
+          <li>Put Credit Spread: neutral to bullish</li>
+          <li>Bull Call Spread: bullish</li>
+          <li>Strike selection & sizing</li>
+          <li>Clear exit rules & real examples</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="put-spread">
+      <h2 class="section-title">Put Credit Spread</h2>
+      <details open>
+        <summary>View Details</summary>
+        <div class="spread-content">
+          <div class="grid">
+            <div class="box">
+              <h3>Definition</h3>
+              <p>Sell an OTM put & buy a lower-strike put to collect a net credit (<strong>neutral-to-bullish</strong>).</p>
+              <h3>Benefits</h3>
+              <ul>
+                <li>Fixed maximum loss</li>
+                <li>Low capital requirement</li>
+                <li>High probability of profit (~60–75%)</li>
+              </ul>
+            </div>
+            <div class="box">
+              <h3>Metrics</h3>
+              <dl>
+                <dt>Max Profit</dt><dd>Credit × 100</dd>
+                <dt>Max Loss</dt><dd>(Width – Credit) × 100</dd>
+                <dt>Breakeven</dt><dd>Short Strike – Credit</dd>
+              </dl>
+              <div class="example"><strong>Example:</strong> Underlying $52; Sell 1× $50 put @ $1.50, Buy 1× $45 put @ $0.50 → Credit $1.00 → Max Profit $100, Max Loss $400, Breakeven $49</div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="call-spread">
+      <h2 class="section-title">Bull Call Spread</h2>
+      <details open>
+        <summary>View Details</summary>
+        <div class="spread-content">
+          <div class="grid">
+            <div class="box">
+              <h3>Definition</h3>
+              <p>Buy a lower-strike call & sell a higher-strike call to pay a net debit (<strong>directional bullish</strong>).</p>
+              <h3>Benefits</h3>
+              <ul>
+                <li>Limited risk</li>
+                <li>Lower cost vs. a single long call</li>
+                <li>Efficient upside exposure</li>
+              </ul>
+            </div>
+            <div class="box">
+              <h3>Metrics</h3>
+              <dl>
+                <dt>Max Profit</dt><dd>(Width – Debit) × 100</dd>
+                <dt>Max Loss</dt><dd>Debit × 100</dd>
+                <dt>Breakeven</dt><dd>Long Strike + Debit</dd>
+              </dl>
+              <div class="example"><strong>Example:</strong> Underlying $52; Buy 1× $50 call @ $3.00, Sell 1× $55 call @ $1.00 → Debit $2.00 → Max Profit $300, Max Loss $200, Breakeven $52</div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="risk-size">
+      <h2 class="section-title">Risk Management & Position Sizing</h2>
+      <div class="box">
+        <ul>
+          <li>Risk 2–5% of account per trade</li>
+          <li>Take profits at 50–80% of max gain</li>
+          <li>Close positions ≥21 days to expiration</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="demo">
+      <h2 class="section-title">Live Demo</h2>
+      <div class="box" style="text-align:center; color: var(--text-muted);">
+        Switch to your brokerage UI to see order entry & management.
+      </div>
+    </section>
+
+    <section id="takeaways">
+      <h2 class="section-title">Key Takeaways</h2>
+      <div class="box">
+        <ul>
+          <li>No surprises: fixed risk & reward</li>
+          <li>Match spreads to your market outlook</li>
+          <li>Size & exits define success</li>
+          <li>Consistency outperforms big swings</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="disclaimer">
+      <h2 class="section-title">Disclaimer</h2>
+      <div class="box">
+        Educational only—<strong>not</strong> financial advice. Options carry risk; consult a professional.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 OptiTrade AI • <a href="/privacy">Privacy Policy</a>
+  </footer>
+</body>
+</html>
