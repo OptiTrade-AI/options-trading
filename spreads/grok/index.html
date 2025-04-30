@@ -1,447 +1,584 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <!--
+  <head>
+    <!--
     Option Spreads for Small Accounts – curated & fact-checked 2025-04-27
     Author: Justin “JJ” Johnson | OptiTrade AI
     This file has been reviewed for accuracy in payoff formulas, examples, and terminology.
   -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Learn how to use defined-risk option spreads (put credit spreads & bull call spreads) to grow a small trading account with disciplined risk management." />
-  <title>Option Spreads for Small Accounts – OptiTrade AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      /* Spacing & Geometry */
-      --radius: 12px;
-      --spacing: 1.5rem;
-      --max-width: 950px;
-      /* Surfaces */
-      --background: #F9FBFD;
-      --surface: #FFFFFF;
-      -- evaluates to #000000 with 0.07 opacity on white
-      --surface-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
-      /* Palette */
-      --primary: #001F3F;
-      --primary-light: #003087;
-      --secondary: #2D3748;
-      /* Text */
-      --text: #1A202C;
-      --text-muted: #4A5568;
-      /* Semantic */
-      --accent: #3182CE;
-      --success: #38A169;
-      --error: #E53E3E;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Learn how to use defined-risk option spreads (put credit spreads & bull call spreads) to grow a small trading account with disciplined risk management."
+    />
+    <title>Option Spreads for Small Accounts – OptiTrade AI</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* Spacing & Geometry */
+        --radius: 12px;
+        --spacing: 1.5rem;
+        --max-width: 950px;
+        /* Surfaces */
+        --background: #f9fbfd;
+        --surface: #ffffff;
+        --surface-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+        /* Palette */
+        --primary: #001f3f;
+        --primary-light: #003087;
+        --secondary: #2d3748;
+        /* Text */
+        --text: #1a202c;
+        --text-muted: #4a5568;
+        /* Semantic */
+        --accent: #3182ce;
+        --success: #38a169;
+        --error: #e53e3e;
+      }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; background: var(--background); scroll-behavior: smooth; }
-    body { font-family: 'Poppins', sans-serif; color: var(--text); display: flex; flex-direction: column; min-height: 100vh; line-height: 1.6; }
-    main { flex: 1 0 auto; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+        background: var(--background);
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+      main {
+        flex: 1 0 auto;
+      }
 
-    /* Header */
-    header {
-      padding: calc(var(--spacing) * 3) var(--spacing);
-      background: linear-gradient(135deg, var(--primary-light), var(--primary));
-      color: var(--surface);
-      text-align: center;
-      box-shadow: var(--surface-shadow);
-      position: relative;
-      z-index: 10;
-    }
-    header h1 {
-      font-size: clamp(2rem, 5vw, 2.5rem);
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-    header p {
-      font-size: clamp(1rem, 3vw, 1.15rem);
-      opacity: 0.9;
-      max-width: 600px;
-      margin: 0 auto;
-    }
+      /* Header */
+      header {
+        padding: calc(var(--spacing) * 3) var(--spacing);
+        background: linear-gradient(
+          135deg,
+          var(--primary-light),
+          var(--primary)
+        );
+        color: var(--surface);
+        text-align: center;
+        box-shadow: var(--surface-shadow);
+        position: relative;
+        z-index: 10;
+      }
+      header h1 {
+        font-size: clamp(2rem, 5vw, 2.5rem);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      header p {
+        font-size: clamp(1rem, 3vw, 1.15rem);
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+      }
 
-    /* Containers */
-    .container { max-width: var(--max-width); margin: calc(var(--spacing) * 3) auto; padding: 0 var(--spacing); }
-    .strategy-section { margin-bottom: calc(var(--spacing) * 2); }
+      /* Containers */
+      .container {
+        max-width: var(--max-width);
+        margin: calc(var(--spacing) * 3) auto;
+        padding: 0 var(--spacing);
+      }
+      .strategy-section {
+        margin-bottom: calc(var(--spacing) * 2);
+      }
 
-    /* Titles */
-    .section-title {
-      font-size: clamp(1.5rem, 4vw, 1.75rem);
-      color: var(--primary);
-      text-align: center;
-      margin: calc(var(--spacing) * 2) 0 calc(var(--spacing) * 1.5);
-      position: relative;
-      font-weight: 600;
-    }
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 3px;
-      background: var(--primary-light);
-      border-radius: 2px;
-    }
+      /* Titles */
+      .section-title {
+        font-size: clamp(1.5rem, 4vw, 1.75rem);
+        color: var(--primary);
+        text-align: center;
+        margin: calc(var(--spacing) * 2) 0 calc(var(--spacing) * 1.5);
+        position: relative;
+        font-weight: 600;
+      }
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 3px;
+        background: var(--primary-light);
+        border-radius: 2px;
+      }
 
-    /* Card */
-    .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: calc(var(--spacing) * 1.5);
-      box-shadow: var(--surface-shadow);
-      transition: transform 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-3px);
-    }
-    .card h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 0.75rem;
-    }
-    .card p, .card li {
-      font-size: 0.9375rem;
-      color: var(--text-muted);
-    }
-    .highlight {
-      color: var(--accent);
-      font-weight: 600;
-    }
+      /* Card */
+      .card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: calc(var(--spacing) * 1.5);
+        box-shadow: var(--surface-shadow);
+        transition: transform 0.2s ease;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+      }
+      .card h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.75rem;
+      }
+      .card p,
+      .card li {
+        font-size: 0.9375rem;
+        color: var(--text-muted);
+      }
+      .highlight {
+        color: var(--accent);
+        font-weight: 600;
+      }
 
-    /* Spread Sections */
-    .spread-details { display: grid; gap: 1rem; }
-    .spread-box {
-      background: #F9FBFD;
-      padding: 1rem;
-      border-radius: 6px;
-      border: 1px solid #E2E8F0;
-    }
-    .spread-box h4 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 0.75rem;
-    }
-    .spread-box p { margin-bottom: 0.5rem; color: var(--text); }
-    .spread-box ul { list-style: none; margin-bottom: 0.5rem; }
-    .spread-box li {
-      position: relative;
-      padding-left: 1.5rem;
-      margin-bottom: 0.25rem;
-      color: var(--text);
-      font-size: 0.9375rem;
-    }
-    .spread-box li::before {
-      content: '▹';
-      position: absolute;
-      left: 0;
-      color: var(--primary);
-      font-size: 1.1rem;
-    }
-    .metrics-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.5rem;
-    }
-    .metrics-table th, .metrics-table td {
-      padding: 0.5rem;
-      text-align: left;
-      font-size: 0.9rem;
-      border-bottom: 1px solid #E2E8F0;
-    }
-    .metrics-table th {
-      color: var(--primary);
-      font-weight: 600;
-    }
-    .metrics-table td { color: var(--text); }
-    .example-box {
-      background: #E6F0FA;
-      padding: 0.75rem;
-      border-radius: 6px;
-      margin-top: 0.5rem;
-    }
+      /* Spread Sections */
+      .spread-details {
+        display: grid;
+        gap: 1rem;
+      }
+      .spread-box {
+        background: #f9fbfd;
+        padding: 1rem;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+      }
+      .spread-box h4 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.75rem;
+      }
+      .spread-box p {
+        margin-bottom: 0.5rem;
+        color: var(--text);
+      }
+      .spread-box ul {
+        list-style: none;
+        margin-bottom: 0.5rem;
+      }
+      .spread-box li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.25rem;
+        color: var(--text);
+        font-size: 0.9375rem;
+      }
+      .spread-box li::before {
+        content: "▹";
+        position: absolute;
+        left: 0;
+        color: var(--primary);
+        font-size: 1.1rem;
+      }
+      .metrics-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 0.5rem;
+      }
+      .metrics-table th,
+      .metrics-table td {
+        padding: 0.5rem;
+        text-align: left;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .metrics-table th {
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .metrics-table td {
+        color: var(--text);
+      }
+      .example-box {
+        background: #e6f0fa;
+        padding: 0.75rem;
+        border-radius: 6px;
+        margin-top: 0.5rem;
+      }
 
-    /* Lists */
-    ul {
-      list-style: none;
-      margin-bottom: 1rem;
-    }
-    ul li {
-      position: relative;
-      padding-left: 1.5rem;
-      margin-bottom: 0.5rem;
-      color: var(--text);
-    }
-    ul li::before {
-      content: '▹';
-      position: absolute;
-      left: 0;
-      color: var(--primary);
-      font-size: 1.1rem;
-    }
+      /* Lists */
+      ul {
+        list-style: none;
+        margin-bottom: 1rem;
+      }
+      ul li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text);
+      }
+      ul li::before {
+        content: "▹";
+        position: absolute;
+        left: 0;
+        color: var(--primary);
+        font-size: 1.1rem;
+      }
 
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: calc(var(--spacing) * 2) var(--spacing);
-      background: var(--primary);
-      color: var(--surface);
-      font-size: 0.85rem;
-      line-height: 1.8;
-    }
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    footer a:hover {
-      color: #90CAF9;
-    }
-    .footer-content {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-    .disclaimer {
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      opacity: 0.85;
-    }
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: calc(var(--spacing) * 2) var(--spacing);
+        background: var(--primary);
+        color: var(--surface);
+        font-size: 0.85rem;
+        line-height: 1.8;
+      }
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+      footer a:hover {
+        color: #90caf9;
+      }
+      .footer-content {
+        max-width: var(--max-width);
+        margin: 0 auto;
+      }
+      .disclaimer {
+        margin-top: 1rem;
+        font-size: 0.8rem;
+        opacity: 0.85;
+      }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      header h1 { font-size: clamp(1.75rem, 4.5vw, 2rem); }
-      header p { font-size: 0.9375rem; }
-      .section-title { font-size: 1.5rem; }
-      .card { padding: var(--spacing); }
-      .card h3 { font-size: 1.125rem; }
-      .card p, .card li { font-size: 0.875rem; }
-      .spread-details { grid-template-columns: 1fr; }
-      .metrics-table th, .metrics-table td { font-size: 0.875rem; }
-    }
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        header h1 {
+          font-size: clamp(1.75rem, 4.5vw, 2rem);
+        }
+        header p {
+          font-size: 0.9375rem;
+        }
+        .section-title {
+          font-size: 1.5rem;
+        }
+        .card {
+          padding: var(--spacing);
+        }
+        .card h3 {
+          font-size: 1.125rem;
+        }
+        .card p,
+        .card li {
+          font-size: 0.875rem;
+        }
+        .spread-details {
+          grid-template-columns: 1fr;
+        }
+        .metrics-table th,
+        .metrics-table td {
+          font-size: 0.875rem;
+        }
+      }
 
-    @media (max-width: 480px) {
-      .container { padding: 0 1rem; }
-      header { padding: calc(var(--spacing) * 2) 1rem; }
-      .metrics-table { display: block; }
-      .metrics-table tr { display: block; margin-bottom: 0.5rem; }
-      .metrics-table th, .metrics-table td { display: block; text-align: left; }
-      footer { padding: calc(var(--spacing) * 1.5) 1rem; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Option Spreads for Small Accounts</h1>
-    <p>Harness defined-risk spreads to grow with confidence</p>
-  </header>
+      @media (max-width: 480px) {
+        .container {
+          padding: 0 1rem;
+        }
+        header {
+          padding: calc(var(--spacing) * 2) 1rem;
+        }
+        .metrics-table {
+          display: block;
+        }
+        .metrics-table tr {
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+        .metrics-table th,
+        .metrics-table td {
+          display: block;
+          text-align: left;
+        }
+        footer {
+          padding: calc(var(--spacing) * 1.5) 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Option Spreads for Small Accounts</h1>
+      <p>Harness defined-risk spreads to grow with confidence</p>
+    </header>
 
-  <main>
-    <div class="container">
+    <main>
+      <div class="container">
+        <!-- INTRO -->
+        <section id="introduction" class="strategy-section">
+          <h2 class="section-title">Introduction</h2>
+          <div class="card">
+            <p>
+              Small accounts can trade safely with
+              <strong>defined-risk spreads</strong>, where your maximum loss is
+              known upfront.
+            </p>
+            <p>You’ll learn:</p>
+            <ul>
+              <li>Put Credit Spreads (neutral to bullish)</li>
+              <li>Bull Call Spreads (bullish)</li>
+              <li>How to choose strikes and manage risk</li>
+              <li>Practical brokerage examples</li>
+            </ul>
+          </div>
+        </section>
 
-      <!-- INTRO -->
-      <section id="introduction" class="strategy-section">
-        <h2 class="section-title">Introduction</h2>
-        <div class="card">
-          <p>Small accounts can trade safely with <strong>defined-risk spreads</strong>, where your maximum loss is known upfront. This guide simplifies two strategies to help you grow your account confidently.</p>
-          <p>You’ll learn:</p>
-          <ul>
-            <li>Put Credit Spreads (neutral to bullish)</li>
-            <li>Bull Call Spreads (bullish)</li>
-            <li>How to choose strikes and manage risk</li>
-            <li>Practical brokerage examples</li>
-          </ul>
-        </div>
-      </section>
+        <!-- PUT CREDIT SPREAD -->
+        <section id="put-credit-spread" class="strategy-section">
+          <h2 class="section-title">Put Credit Spread</h2>
+          <div class="card">
+            <div class="spread-details">
+              <div class="spread-box">
+                <h4>What Is It?</h4>
+                <p>
+                  A <span class="highlight">neutral-to-bullish</span> strategy.
+                  You sell a put option at a higher strike price and buy a put
+                  at a lower strike price (same expiration). You collect a net
+                  credit upfront.
+                </p>
+              </div>
 
-      <!-- PUT CREDIT SPREAD -->
-      <section id="put-credit-spread" class="strategy-section">
-        <h2 class="section-title">Put Credit Spread</h2>
-        <div class="card">
-          <div class="spread-details">
-            <div class="spread-box">
-              <h4>What Is It?</h4>
-              <p>A <span class="highlight">neutral-to-bullish</span> strategy. You sell a put option at a higher strike price and buy a put at a lower strike price (same expiration). You collect a net credit upfront.</p>
-            </div>
-
-            <div class="spread-box">
-              <h4>Why Use It?</h4>
-              <ul>
-                <li><strong>Limited Risk:</strong> Your maximum loss is capped.</li>
-                <li><strong>Low Capital:</strong> Requires 80-90% less cash than selling a put alone.</li>
-                <li><strong>High Win Rate:</strong> 60–75% chance of profit with proper strike selection.*</li>
-              </ul>
-            </div>
-
-            <div class="spread-box">
-              <h4>How It Works</h4>
-              <table class="metrics-table">
-                <tr>
-                  <th>Metric</th>
-                  <th>Formula</th>
-                </tr>
-                <tr>
-                  <td>Max Profit</td>
-                  <td>Credit Received × 100</td>
-                </tr>
-                <tr>
-                  <td>Max Loss</td>
-                  <td>(Strike Width – Credit) × 100</td>
-                </tr>
-                <tr>
-                  <td>Break-even</td>
-                  <td>Short Strike – Credit</td>
-                </tr>
-              </table>
-              <p style="font-size:0.85rem; color:var(--text-muted);">*Based on one contract (100 shares). Win rate assumes deltas of 15–40.</p>
-            </div>
-
-            <div class="spread-box">
-              <h4>Example</h4>
-              <div class="example-box">
-                <p><strong>Stock Price:</strong> $52</p>
-                <p><strong>Trade:</strong></p>
+              <div class="spread-box">
+                <h4>Why Use It?</h4>
                 <ul>
-                  <li>Sell 1 × $50 put for $1.50</li>
-                  <li>Buy 1 × $45 put for $0.50</li>
+                  <li>
+                    <strong>Limited Risk:</strong> Your maximum loss is capped.
+                  </li>
+                  <li>
+                    <strong>Low Capital:</strong> Requires 80-90% less cash than
+                    selling a put alone.
+                  </li>
+                  <li>
+                    <strong>High Win Rate:</strong> 60–75% chance of profit with
+                    proper strike selection.*
+                  </li>
                 </ul>
-                <p><strong>Net Credit:</strong> $1.00</p>
+              </div>
+
+              <div class="spread-box">
+                <h4>How It Works</h4>
                 <table class="metrics-table">
                   <tr>
-                    <th>Outcome</th>
-                    <th>Value</th>
+                    <th>Metric</th>
+                    <th>Formula</th>
                   </tr>
                   <tr>
                     <td>Max Profit</td>
-                    <td>$100</td>
+                    <td>Credit Received × 100</td>
                   </tr>
                   <tr>
                     <td>Max Loss</td>
-                    <td>$400</td>
+                    <td>(Strike Width – Credit) × 100</td>
                   </tr>
                   <tr>
                     <td>Break-even</td>
-                    <td>$49.00</td>
+                    <td>Short Strike – Credit</td>
                   </tr>
                 </table>
+                <p style="font-size: 0.85rem; color: var(--text-muted)">
+                  *Based on one contract (100 shares). Win rate assumes deltas
+                  of 15–40.
+                </p>
+              </div>
+
+              <div class="spread-box">
+                <h4>Example</h4>
+                <div class="example-box">
+                  <p><strong>Stock Price:</strong> $52</p>
+                  <p><strong>Trade:</strong></p>
+                  <ul>
+                    <li>Sell 1 × $50 put for $1.50</li>
+                    <li>Buy 1 × $45 put for $0.50</li>
+                  </ul>
+                  <p><strong>Net Credit:</strong> $1.00</p>
+                  <table class="metrics-table">
+                    <tr>
+                      <th>Outcome</th>
+                      <th>Value</th>
+                    </tr>
+                    <tr>
+                      <td>Max Profit</td>
+                      <td>$100</td>
+                    </tr>
+                    <tr>
+                      <td>Max Loss</td>
+                      <td>$400</td>
+                    </tr>
+                    <tr>
+                      <td>Break-even</td>
+                      <td>$49.00</td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- BULL CALL SPREAD -->
-      <section id="bull-call-spread" class="strategy-section">
-        <h2 class="section-title">Bull Call Spread</h2>
-        <div class="card">
-          <div class="spread-details">
-            <div class="spread-box">
-              <h4>What Is It?</h4>
-              <p>A <span class="highlight">bullish</span> strategy. You buy a call option at a lower strike price and sell a call at a higher strike price (same expiration). You pay a net debit upfront.</p>
-            </div>
+        <!-- BULL CALL SPREAD -->
+        <section id="bull-call-spread" class="strategy-section">
+          <h2 class="section-title">Bull Call Spread</h2>
+          <div class="card">
+            <div class="spread-details">
+              <div class="spread-box">
+                <h4>What Is It?</h4>
+                <p>
+                  A <span class="highlight">bullish</span> strategy. You buy a
+                  call option at a lower strike price and sell a call at a
+                  higher strike price (same expiration). You pay a net debit
+                  upfront.
+                </p>
+              </div>
 
-            <div class="spread-box">
-              <h4>Why Use It?</h4>
-              <ul>
-                <li><strong>Limited Risk:</strong> Your loss is capped at the debit paid.</li>
-                <li><strong>Affordable:</strong> 40-60% cheaper than buying a call alone.</li>
-                <li><strong>Targeted Gains:</strong> Profits from moderate price increases.</li>
-              </ul>
-            </div>
-
-            <div class="spread-box">
-              <h4>How It Works</h4>
-              <table class="metrics-table">
-                <tr>
-                  <th>Metric</th>
-                  <th>Formula</th>
-                </tr>
-                <tr>
-                  <td>Max Profit</td>
-                  <td>(Strike Width – Debit) × 100</td>
-                </tr>
-                <tr>
-                  <td>Max Loss</td>
-                  <td>Debit Paid × 100</td>
-                </tr>
-                <tr>
-                  <td>Break-even</td>
-                  <td>Long Strike + Debit</td>
-                </tr>
-              </table>
-            </div>
-
-            <div class="spread-box">
-              <h4>Example</h4>
-              <div class="example-box">
-                <p><strong>Stock Price:</strong> $52</p>
-                <p><strong>Trade:</strong></p>
+              <div class="spread-box">
+                <h4>Why Use It?</h4>
                 <ul>
-                  <li>Buy 1 × $50 call for $3.00</li>
-                  <li>Sell 1 × $55 call for $1.00</li>
+                  <li>
+                    <strong>Limited Risk:</strong> Your loss is capped at the
+                    debit paid.
+                  </li>
+                  <li>
+                    <strong>Affordable:</strong> 40-60% cheaper than buying a
+                    call alone.
+                  </li>
+                  <li>
+                    <strong>Targeted Gains:</strong> Profits from moderate price
+                    increases.
+                  </li>
                 </ul>
-                <p><strong>Net Debit:</strong> $2.00</p>
+              </div>
+
+              <div class="spread-box">
+                <h4>How It Works</h4>
                 <table class="metrics-table">
                   <tr>
-                    <th>Outcome</th>
-                    <th>Value</th>
+                    <th>Metric</th>
+                    <th>Formula</th>
                   </tr>
                   <tr>
                     <td>Max Profit</td>
-                    <td>$300</td>
+                    <td>(Strike Width – Debit) × 100</td>
                   </tr>
                   <tr>
                     <td>Max Loss</td>
-                    <td>$200</td>
+                    <td>Debit Paid × 100</td>
                   </tr>
                   <tr>
                     <td>Break-even</td>
-                    <td>$52.00</td>
+                    <td>Long Strike + Debit</td>
                   </tr>
                 </table>
               </div>
+
+              <div class="spread-box">
+                <h4>Example</h4>
+                <div class="example-box">
+                  <p><strong>Stock Price:</strong> $52</p>
+                  <p><strong>Trade:</strong></p>
+                  <ul>
+                    <li>Buy 1 × $50 call for $3.00</li>
+                    <li>Sell 1 × $55 call for $1.00</li>
+                  </ul>
+                  <p><strong>Net Debit:</strong> $2.00</p>
+                  <table class="metrics-table">
+                    <tr>
+                      <th>Outcome</th>
+                      <th>Value</th>
+                    </tr>
+                    <tr>
+                      <td>Max Profit</td>
+                      <td>$300</td>
+                    </tr>
+                    <tr>
+                      <td>Max Loss</td>
+                      <td>$200</td>
+                    </tr>
+                    <tr>
+                      <td>Break-even</td>
+                      <td>$52.00</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- RISK MANAGEMENT -->
-      <section id="risk-management" class="strategy-section">
-        <h2 class="section-title">Risk Management & Position Sizing</h2>
-        <div class="card">
-          <ul>
-            <li><strong>2–5% Rule:</strong> Risk only 2–5% of your account per trade.</li>
-            <li><strong>Exit Early:</strong> Close trades at 50–80% of max profit or 21 days before expiration.</li>
-            <li><strong>Diversify:</strong> Avoid multiple trades on similar assets to reduce risk.</li>
-          </ul>
-        </div>
-      </section>
+        <!-- RISK MANAGEMENT -->
+        <section id="risk-management" class="strategy-section">
+          <h2 class="section-title">Risk Management & Position Sizing</h2>
+          <div class="card">
+            <ul>
+              <li>
+                <strong>2–5% Rule:</strong> Risk only 2–5% of your account per
+                trade.
+              </li>
+              <li>
+                <strong>Exit Early:</strong> Close trades at 50–80% of max
+                profit or 21 days before expiration.
+              </li>
+              <li>
+                <strong>Diversify:</strong> Avoid multiple trades on similar
+                assets to reduce risk.
+              </li>
+            </ul>
+          </div>
+        </section>
 
-      <!-- TAKEAWAYS -->
-      <section id="key-takeaways" class="strategy-section">
-        <h2 class="section-title">Key Takeaways</h2>
-        <div class="card">
-          <ul>
-            <li>Defined-risk spreads keep losses manageable for small accounts.</li>
-            <li>Put credit spreads work best when stocks stay stable or rise.</li>
-            <li>Bull call spreads profit from moderate upward moves.</li>
-            <li>Focus on small, consistent gains to grow your account safely.</li>
-          </ul>
-        </div>
-      </section>
+        <!-- TAKEAWAYS -->
+        <section id="key-takeaways" class="strategy-section">
+          <h2 class="section-title">Key Takeaways</h2>
+          <div class="card">
+            <ul>
+              <li>
+                Defined-risk spreads keep losses manageable for small accounts.
+              </li>
+              <li>
+                Put credit spreads work best when stocks stay stable or rise.
+              </li>
+              <li>Bull call spreads profit from moderate upward moves.</li>
+              <li>
+                Focus on small, consistent gains to grow your account safely.
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+      <!-- /.container -->
+    </main>
 
-    </div><!-- /.container -->
-  </main>
-
-  <footer>
-    <div class="footer-content">
-      <p>© 2025 OptiTrade AI • <a href="/privacy" aria-label="Privacy Policy">Privacy Policy</a></p>
-      <p class="disclaimer">This content is for educational purposes only and is <strong>not</strong> financial, investment, or tax advice. Options trading carries risk and may not be suitable for everyone. Consult a licensed professional before trading.</p>
-    </div>
-  </footer>
-</body>
+    <footer>
+      <div class="footer-content">
+        <p>
+          © 2025 OptiTrade AI •
+          <a href="/privacy" aria-label="Privacy Policy">Privacy Policy</a>
+        </p>
+        <p class="disclaimer">
+          This content is for educational purposes only and is
+          <strong>not</strong> financial, investment, or tax advice. Options
+          trading carries risk and may not be suitable for everyone. Consult a
+          licensed professional before trading.
+        </p>
+      </div>
+    </footer>
+  </body>
 </html>
