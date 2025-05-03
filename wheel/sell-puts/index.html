@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selling Put Options Lesson</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/options-trading/put-options.png" type="image/png" />
+  <style>
+    :root {
+      --radius: 8px;
+      --spacing: 1rem;
+      /* surfaces */
+      --background: #FFFFFF;
+      --surface: #F5F5F5;
+      /* palette */
+      --primary: #001F3F;
+      --primary-light: #003566;
+      --secondary: #333333;
+      /* text */
+      --text: #222222;
+      --text-muted: #666666;
+      /* layout */
+      --max-width: 1200px;
+      --line-height: 1.6;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: var(--line-height);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    header {
+      text-align: center;
+      padding: calc(var(--spacing) * 4) var(--spacing);
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      color: var(--surface);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 10;
+    }
+    header h1 { font-size: clamp(2rem, 5vw, 2.5rem); font-weight: 700; }
+    header p { margin-top: 0.5rem; font-size: clamp(1rem, 3vw, 1.25rem); font-weight: 500; opacity: 0.9; }
+    main { flex: 1 0 auto; }
+    .container {
+      max-width: var(--max-width);
+      margin: calc(var(--spacing)*4) auto;
+      padding: 0 var(--spacing);
+    }
+    .section-title {
+      font-size: clamp(1.75rem, 5vw, 2rem);
+      color: var(--primary);
+      text-align: center;
+      margin: var(--spacing) 0;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary-light);
+      border-radius: 2px;
+    }
+    .grid {
+      display: grid;
+      gap: calc(var(--spacing) * 2);
+      grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+      margin-bottom: calc(var(--spacing) * 4);
+    }
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: calc(var(--spacing)*1.5);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+    .card h2 { font-size: 1.4rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .card p { font-size: 1rem; color: var(--text-muted); }
+    /* Modals */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width:100%; height:100%;
+      background: rgba(0,0,0,0.7); display:none; align-items:flex-start; justify-content:center; padding: calc(var(--spacing)*4) var(--spacing);
+      z-index: 20;
+    }
+    .modal-overlay.active { display:flex; }
+    .modal {
+      background: var(--surface); border-radius: var(--radius);
+      max-width: 500px; width:100%; padding: calc(var(--spacing)*2);
+      position: relative; color: var(--text);
+    }
+    .modal h3 { margin-bottom: var(--spacing); color: var(--primary); }
+    .modal ul { margin-left: var(--spacing); color: var(--text-muted); }
+    .modal li { margin-bottom: 0.5rem; }
+    .close-btn {
+      position: absolute; top: var(--spacing); right: var(--spacing);
+      background: none; border: none; font-size: 1.5rem; color: var(--secondary); cursor: pointer;
+    }
+    footer {
+      text-align:center; padding: calc(var(--spacing)*2);
+      background: var(--primary); color: var(--surface); font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Selling Put Options</h1>
+    <p>Core considerations &amp; practical guide for beginners</p>
+  </header>
+  <main>
+    <div class="container">
+      <div class="section-title">Core Considerations</div>
+      <div class="grid">
+        <div class="card" data-modal-target="#modal-stock">
+          <h2>Stock Selection</h2>
+          <p>Choose the right underlying.</p>
+        </div>
+        <div class="card" data-modal-target="#modal-strike">
+          <h2>Strike Price</h2>
+          <p>Pick a suitable strike level.</p>
+        </div>
+        <div class="card" data-modal-target="#modal-premium">
+          <h2>Premium</h2>
+          <p>Assess reward vs. capital risk.</p>
+        </div>
+      </div>
+      <div class="section-title">Technical Indicators</div>
+      <div class="grid">
+        <div class="card" data-modal-target="#modal-bollinger">
+          <h2>Bollinger Bands</h2>
+          <p>Use as a technical decision aid.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Modals -->
+    <div class="modal-overlay" id="modal-stock">
+      <div class="modal">
+        <button class="close-btn" data-close>×</button>
+        <h3>Stock Selection</h3>
+        <ul>
+        <li><strong>ETF vs. Stock</strong>: Diversification vs. larger premiums.</li>
+          <li><strong>Quality</strong>: Stable companies with strong fundamentals.</li>
+          <li><strong>Ownership</strong>: Only sell puts on stocks you'd buy at the strike.</li>
+          <li><strong>Volatility</strong>: Balance premium size vs. risk.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-overlay" id="modal-strike">
+      <div class="modal">
+        <button class="close-btn" data-close>×</button>
+        <h3>Strike Price Selection</h3>
+        <ul>
+          <li><strong>Value</strong>: Strike should represent good value.</li>
+          <li><strong>Assignment Risk</strong>: Lower strikes = lower chance.</li>
+          <li><strong>Reward</strong>: Balance premium vs. potential obligations.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-overlay" id="modal-premium">
+      <div class="modal">
+        <button class="close-btn" data-close>×</button>
+        <h3>Premium Collected</h3>
+        <ul>
+          <li><strong>Return on Capital</strong>: <em>premium ÷ capital at risk</em>.</li>
+          <li><strong>Time Decay</strong>: Faster for nearer expirations.
+            <ul>
+              <li><strong>Sweet Spot</strong>: 30–45 DTE balances decay &amp; premium.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-overlay" id="modal-bollinger">
+      <div class="modal">
+        <button class="close-btn" data-close>×</button>
+        <h3>Bollinger Bands</h3>
+        <ul>
+          <li><strong>Indicator</strong>: 20-period SMA ± 2× standard deviation.</li>
+          <li><strong>Oversold</strong>: Price near lower band may signal support.</li>
+          <li><strong>Volatility</strong>: Wider bands = higher premiums.</li>
+          <li><strong>Trend</strong>: Contracting bands suggest lower volatility ahead.</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+  <footer>© 2025 OptiTrade AI</footer>
+  <script>
+    document.querySelectorAll('[data-modal-target]').forEach(btn =>
+      btn.addEventListener('click', () => {
+        document.querySelector(btn.dataset.modalTarget).classList.add('active');
+      })
+    );
+    document.querySelectorAll('[data-close]').forEach(btn =>
+      btn.addEventListener('click', () => {
+        btn.closest('.modal-overlay').classList.remove('active');
+      })
+    );
+    document.querySelectorAll('.modal-overlay').forEach(overlay =>
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) overlay.classList.remove('active');
+      })
+    );
+  </script>
+</body>
+</html>
