@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Covered Calls Explained: The Ultimate Guide</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"/>
+  <link rel="icon" href="/options-trading/covered_call_image.png" type="image/png">
+  <style>
+    :root {
+      --radius: 12px;
+      --spacing: 2rem;
+      --background: #F8FAFC;
+      --surface: #FFFFFF;
+      --primary: #001F3F;
+      --primary-light: #003566;
+      --accent: #2ECC71;
+      --secondary: #333333;
+      --text: #1A1A1A;
+      --text-muted: #5C5C5C;
+      --info-bg: #EAF2FF;
+      --info-border: #00509E;
+      --max-width: 1000px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.1);
+      --modal-bg: rgba(0,0,0,0.6);
+      --modal-surface: #FFFFFF;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--background);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1 0 auto;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: var(--spacing);
+    }
+
+    header {
+      text-align: center;
+      padding: calc(var(--spacing) * 3) var(--spacing);
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      color: var(--surface);
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 10;
+    }
+    header h1 {
+      font-size: clamp(2.5rem, 6vw, 3.2rem);
+      font-weight: 700;
+      animation: fadeIn 1s ease-in;
+    }
+    header p {
+      margin-top: 1rem;
+      font-size: clamp(1.2rem, 3.5vw, 1.4rem);
+      font-weight: 400;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    nav {
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 9;
+      padding: 1rem var(--spacing);
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    nav ul li a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+    nav ul li a:hover, nav ul li a:focus {
+      background: var(--info-bg);
+      outline: none;
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--surface);
+      cursor: pointer;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    .nav-menu {
+      display: flex;
+    }
+
+    details {
+      background: var(--surface);
+      border-radius: var(--radius);
+      margin-bottom: var(--spacing);
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      animation: fadeIn 0.5s ease-in;
+    }
+    summary {
+      padding: var(--spacing);
+      font-size: clamp(1.6rem, 4vw, 1.8rem);
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    summary::after {
+      content: '▾';
+      font-size: 1.2rem;
+    }
+    details[open] summary::after {
+      content: '▴';
+    }
+    details[open] {
+      padding-bottom: var(--spacing);
+    }
+    details p, details .grid {
+      padding: 0 var(--spacing);
+    }
+
+    .grid {
+      display: grid;
+      gap: calc(var(--spacing) * 1.5);
+    }
+    .steps-grid, .risk-grid, .scenario-grid {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      margin-top: calc(var(--spacing) * 2);
+    }
+
+    .card, .risk-card, .scenario-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: calc(var(--spacing) * 1.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid transparent;
+      background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                  linear-gradient(45deg, var(--primary-light), var(--accent)) border-box;
+      cursor: pointer;
+    }
+    .card:hover, .risk-card:hover, .scenario-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
+    }
+    .card h2, .scenario-card h2 {
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+    .card p, .risk-card p, .scenario-card p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .risk-card::before {
+      content: '⚠️';
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+    .risk-card p {
+      padding-left: 2rem;
+    }
+
+    .strategy-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: calc(var(--spacing) * 2);
+      margin: calc(var(--spacing) * 2) 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .strategy-image {
+      max-width: 100%;
+      margin: 0 auto;
+      border-radius: var(--radius);
+      transition: transform 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+    .strategy-image:hover {
+      transform: scale(1.03);
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted var(--primary);
+      cursor: help;
+    }
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background: var(--primary);
+      color: var(--surface);
+      text-align: center;
+      border-radius: 6px;
+      padding: 0.5rem;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+    }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: var(--accent);
+      color: var(--surface);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease, transform 0.3s ease;
+      margin-top: var(--spacing);
+      font-size: 1.1rem;
+    }
+    .cta-button:hover, .cta-button:focus {
+      background: var(--primary);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: calc(var(--spacing) * 2);
+      background: var(--primary);
+      color: var(--surface);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--modal-bg);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing);
+    }
+    .modal-content {
+      background: var(--modal-surface);
+      border-radius: var(--radius);
+      max-width: 500px;
+      width: 95%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: calc(var(--spacing) * 2);
+      box-shadow: var(--shadow);
+      position: relative;
+      animation: slideIn 0.3s ease;
+    }
+    .modal-content h2 {
+      font-size: clamp(1.8rem, 4vw, 2rem);
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .modal-content p {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .modal-content ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 1rem;
+    }
+    .modal-content ul li {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.8;
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .modal-content ul li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: var(--text-muted);
+ curs: pointer;
+      transition: color 0.3s ease;
+      padding: 0.5rem;
+    }
+    .modal-close:hover, .modal-close:focus {
+      color: var(--accent);
+      outline: none;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+      .nav-menu {
+        display: none;
+        flex-direction: column;
+        background: var(--surface);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding: var(--spacing);
+        box-shadow: var(--shadow);
+      }
+      .nav-menu.active {
+        display: flex;
+      }
+      nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      nav ul li a {
+        display: block;
+        padding: 0.75rem;
+      }
+      .steps-grid, .risk-grid, .scenario-grid {
+        grid-template-columns: 1fr;
+      }
+      header h1 {
+        font-size: clamp(2.2rem, 6vw, 2.8rem);
+      }
+      header p {
+        font-size: 1.1rem;
+      }
+      main {
+        padding: calc(var(--spacing) * 0.75);
+      }
+      .card, .risk-card, .scenario-card {
+        padding: var(--spacing);
+      }
+      .strategy-section {
+        padding: var(--spacing);
+      }
+    }
+
+    @media (max-width: 480px) {
+      summary {
+        font-size: 1.5rem;
+      }
+      .card h2, .scenario-card h2 {
+        font-size: 1.4rem;
+      }
+      .card p, .risk-card p, .scenario-card p {
+        font-size: 0.95rem;
+      }
+      .modal-content {
+        padding: var(--spacing);
+      }
+      .modal-content h2 {
+        font-size: 1.6rem;
+      }
+      .cta-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="hamburger" aria-label="Toggle navigation" onclick="toggleNav()">☰</button>
+    <h1>Covered Calls Explained</h1>
+    <p>A conservative options strategy for generating income and managing risk</p>
+  </header>
+
+  <nav>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#what-is">What is a Covered Call?</a></li>
+      <li><a href="#example">Example Scenario</a></li>
+      <li><a href="#strategies">Key Strategies</a></li>
+      <li><a href="#risks">Common Mistakes</a></li>
+      <li><a href="#advanced">Advanced Techniques</a></li>
+      <li><a href="#summary">Summary & Next Steps</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="introduction">
+      <details open>
+        <summary>Introduction to Covered Calls</summary>
+        <p>Covered calls involve selling a call option against 100 shares of a stock you own to generate income, hedge positions, or strategically exit a stock. This conservative strategy is ideal for beginners due to its manageable <span class="tooltip">risk profile<span class="tooltip-text">The level of potential loss and reward in a strategy</span></span>.</p>
+      </details>
+    </section>
+
+    <section id="what-is">
+      <details>
+        <summary>What is a Covered Call?</summary>
+        <p>A covered call is when you own 100 shares of a stock and sell a call option against those shares, collecting a premium. If the stock reaches the <span class="tooltip">strike price<span class="tooltip-text">The price at which the option can be exercised</span></span>, you may need to sell your shares, but the premium provides income and downside protection.</p>
+        <div class="grid steps-grid">
+          <div class="card" onclick="openModal('modal1')">
+            <h2>Key Components</h2>
+            <p>Understand the obligations, benefits, and terminology like being "short" the call and "long" the stock.</p>
+          </div>
+          <div class="card" onclick="openModal('modal2')">
+            <h2>Options Mechanics</h2>
+            <p>Each contract covers 100 shares. Learn about strike prices, expiration dates, and <span class="tooltip">Greeks<span class="tooltip-text">Metrics like Delta and Theta that measure option price sensitivity</span></span>.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="example">
+      <details>
+        <summary>Covered Call Example</summary>
+        <p>Let’s walk through a scenario: You own 100 shares of Apple (AAPL) at $150/share and sell a $155 call expiring in one month for a $300 premium.</p>
+        <div class="grid scenario-grid">
+          <div class="scenario-card" onclick="openModal('modal3')">
+            <h2>Below $155</h2>
+            <p>Keep the $300 premium and your shares, with a reduced cost basis of $147/share.</p>
+          </div>
+          <div class="scenario-card" onclick="openModal('modal4')">
+            <h2>Above $155</h2>
+            <p>Shares are called away at $155, earning $500 capital gains plus the $300 premium.</p>
+          </div>
+          <div class="scenario-card" onclick="openModal('modal5')">
+            <h2>Stock Drops</h2>
+            <p>The $3/share premium cushions losses, but you still hold the shares.</p>
+          </div>
+        </div>
+        <div class="strategy-section">
+          <img src="/options-trading/covered_call_diagram.png" alt="Covered Call Payoff Diagram" class="strategy-image">
+        </div>
+      </details>
+    </section>
+
+    <section id="strategies">
+      <details>
+        <summary>Key Strategies</summary>
+        <div class="grid steps-grid">
+          <div class="card" onclick="openModal('modal6')">
+            <h2>Choosing Stocks & Strikes</h2>
+            <p>Select stable, dividend-paying stocks and use ATM, OTM, or ITM strikes based on your goals.</p>
+          </div>
+          <div class="card" onclick="openModal('modal7')">
+            <h2>Expiration Timing</h2>
+            <p>Balance short-term, medium-term, or long-term expirations for income and management.</p>
+          </div>
+          <div class="card" onclick="openModal('modal8')">
+            <h2>Risk Management</h2>
+            <p>Roll calls, buy back options, or diversify to manage assignment and <span class="tooltip">opportunity cost<span class="tooltip-text">Potential gains missed due to limited upside</span></span>.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="risks">
+      <details>
+        <summary>Common Mistakes to Avoid</summary>
+        <div class="grid risk-grid">
+          <div class="risk-card">
+            <p>Avoid selling calls on highly volatile stocks without understanding the risks.</p>
+          </div>
+          <div class="risk-card">
+            <p>Be prepared for assignment, especially around ex-dividend dates.</p>
+          </div>
+          <div class="risk-card">
+            <p>Don’t ignore taxes or chase premiums on low-quality stocks.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="advanced">
+      <details>
+        <summary>Advanced Techniques</summary>
+        <p>Elevate your strategy with techniques like Covered Call Ladders, Collars, or Poor Man’s Covered Calls using <span class="tooltip">LEAPS<span class="tooltip-text">Long-term options with expirations over a year</span></span> for broader exposure and reduced risk.</p>
+      </details>
+    </section>
+
+    <section id="summary">
+      <details>
+        <summary>Summary & Next Steps</summary>
+        <p>Covered calls offer steady income with manageable risks, ideal for <span class="tooltip">sideways markets<span class="tooltip-text">Markets with minimal price movement</span></span>. Start with quality stocks, monitor positions, and use broker tools to place and track your first covered call.</p>
+        <p>Consider <span class="tooltip">tax implications<span class="tooltip-text">Premiums and assignments may affect capital gains</span></span> and consult a professional. Adjust strategies for bull, bear, or volatile markets, and diversify across sectors. Use backtesting tools to compare performance on stocks like AAPL or ETFs like QYLD.</p>
+        <a href="#subscribe" class="cta-button">Subscribe for More Options Strategies</a>
+      </details>
+    </section>
+  </main>
+
+  <footer>© 2025 OptiTrade AI • Educational content—do your own research.</footer>
+
+  <!-- Modals -->
+  <div id="modal1" class="modal" role="dialog" aria-labelledby="modal1-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal1')" aria-label="Close modal">×</button>
+      <h2 id="modal1-title">Key Components of a Covered Call</h2>
+      <p>Understand the structure and benefits of a covered call strategy.</p>
+      <ul>
+        <li><strong>Obligation:</strong> If the stock hits the strike price, you must sell your shares.</li>
+        <li><strong>Benefits:</strong> Earn premium income, gain downside protection, and enjoy predictable profits.</li>
+        <li><strong>Terminology:</strong> You’re "short" the call option and "long" the underlying stock.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal2" class="modal" role="dialog" aria-labelledby="modal2-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal2')" aria-label="Close modal">×</button>
+      <h2 id="modal2-title">Options Mechanics</h2>
+      <p>Learn the basics of options contracts and their key metrics.</p>
+      <ul>
+        <li><strong>Contract Size:</strong> Each contract represents 100 shares.</li>
+        <li><strong>Options Chain:</strong> Analyze strike prices, expiration dates, and premiums.</li>
+        <li><strong>Greeks:</strong> <span class="tooltip">Delta<span class="tooltip-text">Measures option price change per $1 stock move</span></span> tracks price changes, <span class="tooltip">Theta<span class="tooltip-text">Measures time decay of option value</span></span> favors sellers via time decay, and <span class="tooltip">Implied Volatility<span class="tooltip-text">Predicts expected stock price movement</span></span> affects premium size.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal3" class="modal" role="dialog" aria-labelledby="modal3-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal3')" aria-label="Close modal">×</button>
+      <h2 id="modal3-title">Stock Stays Below $155</h2>
+      <p>If AAPL remains below $155 at expiration:</p>
+      <ul>
+        <li><strong>Outcome:</strong> The call expires worthless, and you keep the $300 premium.</li>
+        <li><strong>Shares:</strong> You retain your 100 shares of AAPL.</li>
+        <li><strong>Cost Basis:</strong> Your effective cost basis drops to $147/share ($150 - $3).</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal4" class="modal" role="dialog" aria-labelledby="modal4-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal4')" aria-label="Close modal">×</button>
+      <h2 id="modal4-title">Stock Rises Above $155</h2>
+      <p>If AAPL exceeds $155 at expiration:</p>
+      <ul>
+        <li><strong>Outcome:</strong> Shares are called away at $155.</li>
+        <li><strong>Profit:</strong> Gain $500 ($155 - $150 × 100) plus the $300 premium, totaling $800.</li>
+        <li><strong>Next Steps:</strong> Reinvest the proceeds or start a new covered call.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal5" class="modal" role="dialog" aria-labelledby="modal5-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal5')" aria-label="Close modal">×</button>
+      <h2 id="modal5-title">Stock Price Drops</h2>
+      <p>If AAPL falls significantly:</p>
+      <ul>
+        <li><strong>Outcome:</strong> You keep the $300 premium, reducing losses.</li>
+        <li><strong>Shares:</strong> You still own the shares, which may decline in value.</li>
+        <li><strong>Max Loss:</strong> Occurs if the stock goes to zero, limited to $147/share.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal6" class="modal" role="dialog" aria-labelledby="modal6-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal6')" aria-label="Close modal">×</button>
+      <h2 id="modal6-title">Choosing Stocks & Strike Prices</h2>
+      <p>Select the right assets and strikes for your covered call strategy.</p>
+      <ul>
+        <li><strong>Stocks:</strong> Opt for stable, moderately volatile, dividend-paying companies.</li>
+        <li><strong>ATM Strikes:</strong> High premiums, higher assignment risk.</li>
+        <li><strong>OTM Strikes:</strong> Moderate premiums, lower assignment risk, upside potential.</li>
+        <li><strong>ITM Strikes:</strong> High premiums, protective but likely assigned.</li>
+        <li><strong>Implied Volatility:</strong> Higher IV increases premiums but also price movement risk.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal7" class="modal" role="dialog" aria-labelledby="modal7-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal7')" aria-label="Close modal">×</button>
+      <h2 id="modal7-title">Selecting Expiration Dates</h2>
+      <p>Choose expiration timelines that align with your goals.</p>
+      <ul>
+        <li><strong>Short-Term (Weekly/Monthly):</strong> Higher annualized returns, more management.</li>
+        <li><strong>Medium-Term (1-3 Months):</strong> Balanced risk and reward.</li>
+        <li><strong>Long-Term (LEAPS):</strong> Stable income, less active management.</li>
+        <li><strong>DTE:</strong> Shorter DTE increases theta decay benefits but requires active monitoring.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal8" class="modal" role="dialog" aria-labelledby="modal8-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal8')" aria-label="Close modal">×</button>
+      <h2 id="modal8-title">Risk Management Techniques</h2>
+      <p>Protect your portfolio with proactive strategies.</p>
+      <ul>
+        <li><strong>Buy Back Calls:</strong> Close positions if your outlook changes.</li>
+        <li><strong>Roll Calls:</strong> Move to higher strikes or later expirations to avoid assignment.</li>
+        <li><strong>Diversify:</strong> Spread covered calls across sectors to reduce risk.</li>
+        <li><strong>Assignment Risk:</strong> Understand break-even and exit strategies, especially around dividends.</li>
+        <li><strong>Position Sizing:</strong> Allocate appropriately and maintain cash reserves for assignment.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = 'flex';
+      modal.querySelector('.modal-content').focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    function toggleNav() {
+      const navMenu = document.getElementById('nav-menu');
+      navMenu.classList.toggle('active');
+    }
+
+    // Close modal when clicking outside
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal(modal.id);
+        }
+      });
+    });
+
+    // Close modal and nav with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal').forEach(modal => {
+          closeModal(modal.id);
+        });
+        document.getElementById('nav-menu').classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
