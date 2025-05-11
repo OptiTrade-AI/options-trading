@@ -7,7 +7,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"/>
-  <link rel="icon" href="/options-trading/covered_call_image.png" type="image/png">
+  <!-- Note: Ensure the favicon image exists at this path when deploying, or replace with a valid path -->
+  <link rel="icon" href="/options-trading/covered_call_image.png" type="image/png" alt="Covered Call Icon">
   <style>
     :root {
       --radius: 12px;
@@ -165,14 +166,14 @@
       gap: calc(var(--spacing) * 1.5);
     }
     .steps-grid, .risk-grid, .scenario-grid {
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       margin-top: calc(var(--spacing) * 2);
     }
 
     .card, .risk-card, .scenario-card {
       background: var(--surface);
       border-radius: var(--radius);
-      padding: calc(var(--spacing) * 1.5);
+      padding: var(--spacing);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -185,27 +186,17 @@
       transform: translateY(-8px);
       box-shadow: var(--shadow);
     }
-    .card h2, .scenario-card h2 {
-      font-size: 1.6rem;
+    .card h2, .risk-card h2, .scenario-card h2 {
+      font-size: 1.5rem;
       color: var(--primary);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
       font-weight: 600;
     }
     .card p, .risk-card p, .scenario-card p {
       font-size: 1rem;
       color: var(--text-muted);
       line-height: 1.8;
-    }
-    .risk-card::before {
-      content: '⚠️';
-      position: absolute;
-      left: 20px;
-      top: 20px;
-      font-size: 1.2rem;
-      color: var(--accent);
-    }
-    .risk-card p {
-      padding-left: 2rem;
+      font-weight: 500;
     }
 
     .strategy-section {
@@ -225,6 +216,12 @@
     }
     .strategy-image:hover {
       transform: scale(1.03);
+    }
+    .image-caption {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-align: center;
     }
 
     .tooltip {
@@ -250,7 +247,7 @@
       transition: opacity 0.3s;
       font-size: 0.9rem;
     }
-    .tooltip:hover .tooltip-text {
+    .tooltip:hover .tooltip-text, .tooltip:focus .tooltip-text {
       visibility: visible;
       opacity: 1;
     }
@@ -349,7 +346,7 @@
       border: none;
       font-size: 1.8rem;
       color: var(--text-muted);
- curs: pointer;
+      cursor: pointer;
       transition: color 0.3s ease;
       padding: 0.5rem;
     }
@@ -412,7 +409,7 @@
       summary {
         font-size: 1.5rem;
       }
-      .card h2, .scenario-card h2 {
+      .card h2, .risk-card h2, .scenario-card h2 {
         font-size: 1.4rem;
       }
       .card p, .risk-card p, .scenario-card p {
@@ -446,37 +443,18 @@
   <header>
     <button class="hamburger" aria-label="Toggle navigation" onclick="toggleNav()">☰</button>
     <h1>Covered Calls Explained</h1>
-    <p>A conservative options strategy for generating income and managing risk</p>
+    <p>A conservative options strategy for generating income, with the full downside risk of stock ownership mitigated by the premium</p>
   </header>
 
-  <nav>
-    <ul class="nav-menu" id="nav-menu">
-      <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#what-is">What is a Covered Call?</a></li>
-      <li><a href="#example">Example Scenario</a></li>
-      <li><a href="#strategies">Key Strategies</a></li>
-      <li><a href="#risks">Common Mistakes</a></li>
-      <li><a href="#advanced">Advanced Techniques</a></li>
-      <li><a href="#summary">Summary & Next Steps</a></li>
-    </ul>
-  </nav>
-
   <main>
-    <section id="introduction">
+    <section id="understanding">
       <details open>
-        <summary>Introduction to Covered Calls</summary>
-        <p>Covered calls involve selling a call option against 100 shares of a stock you own to generate income, hedge positions, or strategically exit a stock. This conservative strategy is ideal for beginners due to its manageable <span class="tooltip">risk profile<span class="tooltip-text">The level of potential loss and reward in a strategy</span></span>.</p>
-      </details>
-    </section>
-
-    <section id="what-is">
-      <details>
-        <summary>What is a Covered Call?</summary>
-        <p>A covered call is when you own 100 shares of a stock and sell a call option against those shares, collecting a premium. If the stock reaches the <span class="tooltip">strike price<span class="tooltip-text">The price at which the option can be exercised</span></span>, you may need to sell your shares, but the premium provides income and downside protection.</p>
+        <summary>Understanding Covered Calls</summary>
+        <p>Covered calls are a conservative options strategy, where you own 100 shares of a stock and sell a call option against those shares to generate income, hedge positions, or strategically exit a stock. If the stock reaches the strike price, you may need to sell your shares, but the premium provides income and downside protection.</p>
         <div class="grid steps-grid">
           <div class="card" onclick="openModal('modal1')">
             <h2>Key Components</h2>
-            <p>Understand the obligations, benefits, and terminology like being "short" the call and "long" the stock.</p>
+            <p>Explore the obligations, benefits, and terminology like being "short" the call and "long" the stock.</p>
           </div>
           <div class="card" onclick="openModal('modal2')">
             <h2>Options Mechanics</h2>
@@ -489,23 +467,30 @@
     <section id="example">
       <details>
         <summary>Covered Call Example</summary>
-        <p>Let’s walk through a scenario: You own 100 shares of Apple (AAPL) at $150/share and sell a $155 call expiring in one month for a $300 premium.</p>
+        <p>Imagine you own 100 Apple shares, which you bought for <strong>$150</strong> each. You decide to sell a call option with a <span class="tooltip">strike price<span class="tooltip-text">The price at which you agree to sell your shares if the option is exercised</span></span> of <strong>$155</strong>. This option expires in one month, and you get a <span class="tooltip">premium<span class="tooltip-text">The cash you get upfront for selling the option</span></span> of <strong>$300</strong> right away. This lowers your <span class="tooltip">cost basis<span class="tooltip-text">Your original purchase price minus the premium received</span></span> to <strong>$147</strong> per share ($150 - $3). This means your break-even price is $147 per share, calculated as your purchase price ($150) minus the premium per share ($3).</p>
+        <p style="margin-top: 1rem;">Let’s see what happens at the end of the month when the option expires:</p>
         <div class="grid scenario-grid">
-          <div class="scenario-card" onclick="openModal('modal3')">
-            <h2>Below $155</h2>
-            <p>Keep the $300 premium and your shares, with a reduced cost basis of $147/share.</p>
+          <div class="scenario-card" onclick="openModal('modal3')" role="button" aria-describedby="below-155-desc">
+            <h2>Stock Stays Below $155</h2>
+            <p id="below-155-desc">The option expires worthless. You keep the <strong>$300 premium</strong> and your 100 shares, with a new cost basis of <strong>$147</strong> per share.</p>
           </div>
-          <div class="scenario-card" onclick="openModal('modal4')">
-            <h2>Above $155</h2>
-            <p>Shares are called away at $155, earning $500 capital gains plus the $300 premium.</p>
+          <div class="scenario-card" onclick="openModal('modal4')" role="button" aria-describedby="above-155-desc">
+            <h2>Stock Rises Above $155</h2>
+            <p id="above-155-desc">Your shares are <span class="tooltip">called away<span class="tooltip-text">Sold at the strike price because the option was exercised</span></span> at <strong>$155</strong>. You make <strong>$500</strong> in gains ($155 - $150 × 100) plus the <strong>$300 premium</strong>, totaling <strong>$800</strong>.</p>
           </div>
-          <div class="scenario-card" onclick="openModal('modal5')">
-            <h2>Stock Drops</h2>
-            <p>The $3/share premium cushions losses, but you still hold the shares.</p>
+          <div class="scenario-card" onclick="openModal('modal5')" role="button" aria-describedby="stock-drops-desc">
+            <h2>Stock Price Drops</h2>
+            <p id="stock-drops-desc">The option expires worthless. You keep the <strong>$300 premium</strong>, which helps offset losses, but your shares lose value. Worst case, you lose <strong>$147</strong> per share.</p>
           </div>
         </div>
         <div class="strategy-section">
-          <img src="/options-trading/covered_call_diagram.png" alt="Covered Call Payoff Diagram" class="strategy-image">
+          <p style="margin-bottom: 0.5rem;">This graph shows how your earnings change with Apple’s stock price:</p>
+          <div class="tooltip">
+            <!-- Note: Ensure this image exists at the specified path when deploying, or replace with a valid path -->
+            <img src="/options-trading/covered_call_diagram.png" alt="Graph showing covered call profit/loss: max profit $800 at $155 and above, breakeven at $147" class="strategy-image">
+            <span class="tooltip-text">Breakeven at $147, max profit at $800</span>
+          </div>
+          <p class="image-caption">How your profits and losses look based on Apple’s price at expiration.</p>
         </div>
       </details>
     </section>
@@ -532,16 +517,19 @@
 
     <section id="risks">
       <details>
-        <summary>Common Mistakes to Avoid</summary>
+        <summary>Common Mistakes to Avoid ⚠️</summary>
         <div class="grid risk-grid">
-          <div class="risk-card">
-            <p>Avoid selling calls on highly volatile stocks without understanding the risks.</p>
+          <div class="risk-card" onclick="openModal('modal11')">
+            <h2>Volatility Risk</h2>
+            <p>Avoid selling calls on highly volatile stocks without understanding the risks. Learn more about volatility risks.</p>
           </div>
-          <div class="risk-card">
-            <p>Be prepared for assignment, especially around ex-dividend dates.</p>
+          <div class="risk-card" onclick="openModal('modal10')">
+            <h2>Assignment Risk</h2>
+            <p>American-style options can be exercised any time before expiration, especially for deep ITM calls or around ex-dividend dates. Learn more about assignment risks.</p>
           </div>
-          <div class="risk-card">
-            <p>Don’t ignore taxes or chase premiums on low-quality stocks.</p>
+          <div class="risk-card" onclick="openModal('modal9')">
+            <h2>Tax and Quality</h2>
+            <p>Don’t ignore tax implications or chase premiums on low-quality stocks. Learn more about tax treatment.</p>
           </div>
         </div>
       </details>
@@ -551,15 +539,6 @@
       <details>
         <summary>Advanced Techniques</summary>
         <p>Elevate your strategy with techniques like Covered Call Ladders, Collars, or Poor Man’s Covered Calls using <span class="tooltip">LEAPS<span class="tooltip-text">Long-term options with expirations over a year</span></span> for broader exposure and reduced risk.</p>
-      </details>
-    </section>
-
-    <section id="summary">
-      <details>
-        <summary>Summary & Next Steps</summary>
-        <p>Covered calls offer steady income with manageable risks, ideal for <span class="tooltip">sideways markets<span class="tooltip-text">Markets with minimal price movement</span></span>. Start with quality stocks, monitor positions, and use broker tools to place and track your first covered call.</p>
-        <p>Consider <span class="tooltip">tax implications<span class="tooltip-text">Premiums and assignments may affect capital gains</span></span> and consult a professional. Adjust strategies for bull, bear, or volatile markets, and diversify across sectors. Use backtesting tools to compare performance on stocks like AAPL or ETFs like QYLD.</p>
-        <a href="#subscribe" class="cta-button">Subscribe for More Options Strategies</a>
       </details>
     </section>
   </main>
@@ -661,10 +640,53 @@
       <p>Protect your portfolio with proactive strategies.</p>
       <ul>
         <li><strong>Buy Back Calls:</strong> Close positions if your outlook changes.</li>
-        <li><strong>Roll Calls:</strong> Move to higher strikes or later expirations to avoid assignment.</li>
+        <li><strong>Roll Calls:</strong> Adjust positions to avoid assignment:
+          <ul style="list-style: none; padding-left: 1.5rem;">
+            <li style="padding-left: 0;">• <strong>Roll Up:</strong> Move to a higher strike, same expiration, to capture more upside.</li>
+            <li style="padding-left: 0;">• <strong>Roll Out:</strong> Move to a later expiration, same strike, to extend time.</li>
+            <li style="padding-left: 0;">• <strong>Roll Up and Out:</strong> Move to a higher strike and later expiration for both benefits.</li>
+          </ul>
+        </li>
         <li><strong>Diversify:</strong> Spread covered calls across sectors to reduce risk.</li>
         <li><strong>Assignment Risk:</strong> Understand break-even and exit strategies, especially around dividends.</li>
-        <li><strong>Position Sizing:</strong> Allocate appropriately and maintain cash reserves for assignment.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal9" class="modal" role="dialog" aria-labelledby="modal9-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal9')" aria-label="Close modal">×</button>
+      <h2 id="modal9-title">Tax Implications of Covered Calls</h2>
+      <p>Understand how taxes apply to covered calls and consult a tax professional for your situation.</p>
+      <ul>
+        <li><strong>Premiums:</strong> The premium you receive (e.g., $300 in the example) is taxed as a short-term capital gain, treated as ordinary income (up to 37% depending on your tax bracket).</li>
+        <li><strong>Qualified Covered Calls:</strong> Meet IRS criteria (e.g., strike price not too deep in-the-money, expiration not too far out). Stock gains qualify for long-term capital gains tax (0-20%) if you’ve held the stock over a year.</li>
+        <li><strong>Non-Qualified Covered Calls:</strong> Deep ITM calls or very short expirations may reset your stock’s holding period, making gains short-term (taxed as ordinary income). This can increase your tax liability.</li>
+        <li><strong>Assignment Impact:</strong> If shares are called away, the sale may trigger capital gains tax based on your holding period and qualification status.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal10" class="modal" role="dialog" aria-labelledby="modal10-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal10')" aria-label="Close modal">×</button>
+      <h2 id="modal10-title">Early Assignment Risks</h2>
+      <p>Understand the risks of early assignment and how to manage them.</p>
+      <ul>
+        <li><strong>American-Style Options:</strong> Most equity options are American-style, meaning they can be exercised any time before expiration, not just at expiration.</li>
+        <li><strong>Deep ITM Calls:</strong> If your call is deep in-the-money (e.g., stock price well above the $155 strike) and the option’s time value is low, the buyer may exercise early to capture the stock’s value.</li>
+        <li><strong>Ex-Dividend Dates:</strong> Early assignment risk increases before ex-dividend dates, as buyers may exercise to receive the dividend.</li>
+        <li><strong>Mitigation:</strong> Monitor the option’s time value, avoid deep ITM strikes near dividend dates, or roll the call to a higher strike or later expiration.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="modal11" class="modal" role="dialog" aria-labelledby="modal11-title">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal11')" aria-label="Close modal">×</button>
+      <h2 id="modal11-title">Volatility Risks in Covered Calls</h2>
+      <p>Understand why high volatility can be risky for covered calls and how to manage it.</p>
+      <ul>
+        <li><strong>Price Swings:</strong> High volatility means larger stock price movements, increasing the chance of the stock price exceeding the strike (leading to assignment) or dropping significantly (increasing losses).</li>
+        <li><strong>Implied Volatility (IV):</strong> Higher IV increases premiums (e.g., you might get more than $300 for the call), but it also signals greater expected price movement, amplifying risk.</li>
+        <li><strong>Management Tips:</strong> Choose stocks with moderate volatility, monitor IV before selling calls, and consider wider strike prices (e.g., $160 instead of $155) to reduce assignment risk.</li>
       </ul>
     </div>
   </div>
